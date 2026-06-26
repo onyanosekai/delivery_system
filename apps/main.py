@@ -14,8 +14,11 @@ def main():
     deleted_products = []
 
     # 管理者（仮）
-    admin = Administrator(1, "admin", "password")
-    user_controller.create_admin(admin)
+    admin_id = input("登録するID: ")
+    name = input("登録する名前: ")
+    password = input("登録するパスワード: ")
+
+    user_controller.create_admin(admin_id, name, password)
 
     # ===== ログイン =====
     print("=== ログイン ===")

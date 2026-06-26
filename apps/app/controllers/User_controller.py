@@ -33,7 +33,7 @@ class UserController:
         return None
 
     # 2. ユーザー登録処理 (仕様書準拠 ＋ エンティティ生成)
-    def register_user(self, admin_id: str, name: str, password: str) -> dict:
+    def create_admin(self, admin_id: str, name: str, password: str) -> dict:
         """
         ユースケース：ユーザー情報を登録する
         仕様書のバリデーションを行い、クリアしたら Administrator インスタンスを生成して保存する
