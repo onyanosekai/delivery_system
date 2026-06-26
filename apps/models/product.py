@@ -8,5 +8,7 @@ class Product:
         self.deadline = deadline
         self.driver_id = driver_id
 
+        self.status = "未受取"  # 初期状態は未受取
+        
     def is_delivered(self):
-        return False
+        return self.status == "受取り済み"
