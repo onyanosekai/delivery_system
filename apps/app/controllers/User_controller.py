@@ -6,9 +6,7 @@ class UserContoroller:
         # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []
 
-    # ==========================================
-    # 1. ログイン処理 (エンティティ連動版)
-    # ==========================================
+    # 1. ログイン処理 
     def login(self, admin_id: int, password: str) -> bool:
         """
         管理者のログイン認証を行うメソッド
@@ -34,9 +32,7 @@ class UserContoroller:
                 return admin
         return None
 
-    # ==========================================
     # 2. ユーザー登録処理 (仕様書準拠 ＋ エンティティ生成)
-    # ==========================================
     def register_user(self, admin_id: str, name: str, password: str) -> dict:
         """
         ユースケース：ユーザー情報を登録する
@@ -50,7 +46,7 @@ class UserContoroller:
                 "message": "未入力の項目があります。すべての項目を正しく入力してください。"
             }
 
-        # 【基本フロー 5 / 代替フロー 5a】 パスワード英数字混合8文字以上チェック
+        # パスワード英数字混合8文字以上チェック
         is_length_ok = len(password) >= 8
         has_letter = any(char.isalpha() for char in password)
         has_digit = any(char.isdigit() for char in password)
@@ -61,7 +57,7 @@ class UserContoroller:
                 "message": "パスワードは【英数字混合の8文字以上】で設定してください。"
             }
 
-        # 【追加の安全策】 すでに同じIDの管理者が登録されていないかチェック
+        #  すでに同じIDの管理者が登録されていないかチェック
         try:
             int_id = int(admin_id)
             if self.find_admin(int_id) is not None:
@@ -75,7 +71,7 @@ class UserContoroller:
                 "message": "管理者IDは数値で入力してください。"
             }
 
-        # 【基本フロー 7】 管理者をユーザー一覧に登録する
+        # 管理者をユーザー一覧に登録する
         # 作成してもらった Administrator の __init__ にデータを渡してインスタンス化
         # これによって、内部で自動的にパスワードがハッシュ化されて保存されます
         new_admin = Administrator(
