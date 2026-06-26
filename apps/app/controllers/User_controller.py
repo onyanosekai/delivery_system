@@ -1,5 +1,5 @@
 
-from models.Administrator import Administrator
+from app.models.Administrator import Administrator
 
 class UserController:
     def __init__(self):
