@@ -38,5 +38,6 @@ class ProductController:
                 return product
         return None
 
-    def confirm_delete(self,product): #後から書きます
+    def confirm_delete(self,product): 
+        
         pass

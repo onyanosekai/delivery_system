@@ -1,7 +1,7 @@
-# 作成してもらった models/administrator.py から Administrator クラスをインポート
-from models.administrator import Administrator
 
-class UserContoroller:
+from models.Administrator import Administrator
+
+class UserController:
     def __init__(self):
         # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []

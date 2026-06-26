@@ -1,6 +1,7 @@
 from app.controllers.Product_controller import ProductController
 from app.controllers.User_controller import UserController
 from app.models.Product import Product
+from app.models.Administrator import Administrator
 from datetime import date
 
 
@@ -13,7 +14,8 @@ def main():
     deleted_products = []
 
     # 管理者（仮）
-    user_controller.create_admin(1, "admin", "password")
+    admin = Administrator(1, "admin", "password")
+    user_controller.create_admin(admin)
 
     # ===== ログイン =====
     print("=== ログイン ===")
