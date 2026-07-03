@@ -9,7 +9,12 @@ class ProductController:
     PRODUCT_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Product.json")
     DELETED_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Deleted_product.json")
 
+    def __init__(self):
+        # コントローラーがデータリストを保持するようにする
+        self.products: List[Product] = []
 
+    
+    
     #=================================登録=========================================
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
         if not product_id or not product_name or not customer_name or not delivery_date or not deadline or not driver_id:
@@ -42,8 +47,8 @@ class ProductController:
         return True
     
     #==============================商品検索=========================================
-    def search_items(self,products: List[Product],product_id: str,customer_name: str):
-        for product in products:
+    def search_items(self,product_id: str,customer_name: str):
+        for product in self.products:
             if product.product_id == product_id and product.customer_name == customer_name:
                 return product
         return None
