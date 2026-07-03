@@ -42,7 +42,7 @@ class ProductController:
         return True
     
     #==============================商品検索=========================================
-    def search_items(self,products,product_id,customer_name):
+    def search_items(self,products: List[Product],product_id: str,customer_name: str):
         for product in products:
             if product.product_id == product_id and product.customer_name == customer_name:
                 return product

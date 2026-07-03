@@ -3,11 +3,7 @@ from tkinter import messagebox
 
 class SerchPage:
     def __init__(self, root, controller):
-        """
-        初期化メソッド
-        :param root: Tkinterのメインウィンドウ
-        :param controller: productController のインスタンス
-        """
+        
         self.root = root
         self.controller = controller  # クラス図で繋がっている productController を保持
         
@@ -59,7 +55,7 @@ class SerchPage:
             
         self.inputProductInfo(customer_name, item_number)
 
-    def search_product(self, customer_name: str, item_number: str) -> None:
+    def inputProductInfo(self, customer_name: str, item_number: str) -> None:
         from app.controllers.product_controller import ProductController
         product = self.controller.search_items(self.controller.products, item_number, customer_name)
         
