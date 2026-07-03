@@ -1,6 +1,7 @@
 import datetime
 import json
 import os
+import tkinter as messagebox
 from typing import List, Optional
 from app.models.Product import Product
 
@@ -19,19 +20,19 @@ class ProductController:
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
 
         if len(product_id) != 11:
-            print("error: 商品番号は11桁である必要があります。")
+            messagebox.showerror("エラー", "商品番号は11桁である必要があります。")
             return False
         
         if len(product_name) > 80:
-            print("error: 商品名は80文字以内である必要があります。")
+            messagebox.showerror("エラー", "商品名は80文字以内である必要があります。")
             return False
     
         if len(customer_name) > 80:
-            print("error: 顧客名は80文字以内である必要があります。")
+            messagebox.showerror("エラー", "顧客名は80文字以内である必要があります。")
             return False
 
         if delivery_date < datetime.date.today():
-            print("error: 過去の日付は登録できません。")
+            messagebox.showerror("エラー", "過去の日付は登録できません。")
             return False
 
         return True
@@ -39,7 +40,7 @@ class ProductController:
     #===============================期限チェック=========================================
     def check_deadline(self,deadline):
         if datetime.date.today() > deadline:
-            print("error: 受け取り期限が過ぎています。")
+            messagebox.showerror("エラー", "受け取り期限が過ぎています。")
             return False
         return True
     
@@ -55,13 +56,13 @@ class ProductController:
     def confirm_delete(self, target_product: Product) -> bool:
         if target_product in self.products:
             self.products.remove(target_product)
-            print(f"success: 商品名「{target_product.product_name}」のデータを削除しました。")
+            messagebox.showinfo("成功", f"商品名「{target_product.product_name}」のデータを削除しました。")
             return True
         else:
-            print("error: 削除対象の商品が見つかりません。")
+            messagebox.showerror("エラー", "削除対象の商品が見つかりません。")
             return False
         
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
         product.status = "受取り済み"
-        print(f"success: 商品名「{product.product_name}」の受取が完了しました。")
+        messagebox.showinfo(""f"商品名「{product.product_name}」の受取が完了しました。")

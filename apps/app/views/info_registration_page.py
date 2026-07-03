@@ -102,7 +102,7 @@ class InfoRegistrationPage:
             return
 
         # コントローラーの validate_product を呼び出し
-        if self.controller.validate_product(p_id, p_name, c_name, deliv_date, dead_date, d_id):
+        if self.controller.product_controller.validate_product(p_id, p_name, c_name, deliv_date, dead_date, d_id):
             messagebox.showinfo("成功", "登録が完了しました。")
             self.root.destroy()
         else:
