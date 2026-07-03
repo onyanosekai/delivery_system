@@ -51,6 +51,17 @@ class RegistrationPage:
         )
         self.btn_register.pack(pady=20)
 
+        #戻るボタン
+        self.btn_back = tk.Button(
+            root,
+            text="戻る",
+            bg="gray",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            command=self._on_back_clicked # 下で定義するメソッドを呼ぶ
+        )
+        self.btn_back.pack(pady=5)
+
     def inputUserInfo(self, admin_id: str, name: str, password: str) -> None:
         """
         クラス図にある inputUserInfo メソッド
@@ -84,6 +95,12 @@ class RegistrationPage:
             
         # クラス図の指定通り、inputUserInfo メソッドに入力データを渡して実行
         self.inputUserInfo(admin_id, name, password)
+
+    def _on_back_clicked(self):
+        """「戻る」ボタンが押された時に初期画面に戻る"""
+        # ログイン画面の時と完全に同じ処理です！
+        if hasattr(self.controller, 'show_initial_page'):
+            self.controller.show_initial_page()
 
     def display(self):
         """画面を表示するための補助メソッド"""

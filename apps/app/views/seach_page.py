@@ -45,6 +45,17 @@ class SerchPage:
         )
         self.btn_search.pack(side="left", padx=10)
 
+         #戻るボタン
+        self.btn_back = tk.Button(
+            root,
+            text="戻る",
+            bg="gray",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            command=self._on_back_clicked # 下で定義するメソッドを呼ぶ
+        )
+        self.btn_back.pack(pady=5)
+
     def _on_search_clicked(self):
         customer_name = self.entry_customer.get().strip()
         item_number = self.entry_item_num.get().strip()
@@ -54,7 +65,13 @@ class SerchPage:
             return
             
         self.inputProductInfo(customer_name, item_number)
-
+        
+    def _on_back_clicked(self):
+        """「戻る」ボタンが押された時に初期画面に戻る"""
+        # ログイン画面の時と完全に同じ処理です！
+        if hasattr(self.controller, 'show_initial_page'):
+            self.controller.show_initial_page()
+    
     def inputProductInfo(self, customer_name: str, item_number: str) -> None:
         from app.controllers.product_controller import ProductController
         product = self.controller.search_items(item_number, customer_name)
