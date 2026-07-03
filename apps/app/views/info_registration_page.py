@@ -1,5 +1,8 @@
 import tkinter as tk
+import os
+import datetime
 from tkinter import messagebox
+from app.controllers.product_controller import ProductController
 
 class InfoRegistrationPage:
     def __init__(self, root, controller):
@@ -23,9 +26,43 @@ class InfoRegistrationPage:
         self.label_hint = tk.Label(root, text="登録する情報を入力してください：", font=("Arial", 10))
         self.label_hint.pack(anchor="w", padx=30, pady=5)
         
-        # 情報入力欄（複数行入力できるように Text ウィジェットを使用）
-        self.text_info = tk.Text(root, height=6, width=50, font=("Arial", 10))
-        self.text_info.pack(padx=30, pady=5)
+        # --- 入力項目の配置 ---
+        
+        # 1. 商品名 (productName)
+        self.label_product = tk.Label(root, text="商品名:")
+        self.label_product.pack(anchor="w", padx=50, pady=2)
+        self.entry_product = tk.Entry(root, width=35)
+        self.entry_product.pack(padx=50, pady=5)
+        
+        # 2. 商品番号 (itemNumber)
+        self.label_item_num = tk.Label(root, text="商品番号:")
+        self.label_item_num.pack(anchor="w", padx=50, pady=2)
+        self.entry_item_num = tk.Entry(root, width=35)
+        self.entry_item_num.pack(padx=50, pady=5)
+
+        # 3. 顧客名 (customerName)
+        self.label_customer = tk.Label(root, text="顧客名:")
+        self.label_customer.pack(anchor="w", padx=50, pady=2)
+        self.entry_customer = tk.Entry(root, width=35)
+        self.entry_customer.pack(padx=50, pady=5)
+
+        # 4. 配達日 (deliveryDate)
+        self.label_delivery = tk.Label(root, text="配達日 (YYYY-MM-DD):")
+        self.label_delivery.pack(anchor="w", padx=50, pady=2)
+        self.entry_delivery = tk.Entry(root, width=35)
+        self.entry_delivery.pack(padx=50, pady=5)
+
+        # 5. 受け取り期限 (deadline)
+        self.label_deadline = tk.Label(root, text="受け取り期限 (YYYY-MM-DD):")
+        self.label_deadline.pack(anchor="w", padx=50, pady=2)
+        self.entry_deadline = tk.Entry(root, width=35)
+        self.entry_deadline.pack(padx=50, pady=5)
+
+        # 6. 配達員ID (driverId)
+        self.label_driver = tk.Label(root, text="配達員ID:")
+        self.label_driver.pack(anchor="w", padx=50, pady=2)
+        self.entry_driver = tk.Entry(root, width=35)
+        self.entry_driver.pack(padx=50, pady=5)
         
         # 登録ボタン（クリックで submit メソッドを呼び出す）
         self.btn_submit = tk.Button(
@@ -67,19 +104,38 @@ class InfoRegistrationPage:
         self.root.destroy()  # 登録が終わったら画面を閉じる
 
     def _on_submit_clicked(self):
-        """
-        「登録する」ボタンが押された時の内部処理
-        """
-        # 入力欄からテキストを取得（前後の余白を削除）
-        input_data = self.text_info.get("1.0", "end-1c").strip()
+        product_name = self.entry_product.get().strip()
+        item_id = self.entry_item_num.get().strip()
+        customer = self.entry_customer.get().strip()
+        delivery = self.entry_delivery.get().strip()
+        deadline = self.entry_deadline.get().strip()
+        driver = self.entry_driver.get().strip()
         
-        # バリデーション：未入力チェック
-        if not input_data:
-            messagebox.showwarning("入力エラー", "情報が入力されていません。")
+        # 画面側でサッとチェックしてからコントローラーへ投げる
+        if not (product_name and item_id and customer and delivery and deadline and driver):
+            messagebox.showwarning("入力エラー", "全ての項目を入力してください。")
             return
             
-        # クラス図の指定通り、submit メソッドに入力データを渡して実行
-        self.submit(input_data)
+        # submitメソッドへ渡す
+        self.submit(item_id, product_name, customer, delivery, deadline, driver)
+
+    def submit(self, p_id, p_name, c_name, deliv_d, dead_line, d_id) -> None:
+        # 文字列の日付を datetime 型に変換（Controllerへ渡す前に変換しておくのが安全です）
+        import datetime
+        try:
+            deliv_date = datetime.datetime.strptime(deliv_d, "%Y-%m-%d").date()
+            dead_date = datetime.datetime.strptime(dead_line, "%Y-%m-%d").date()
+        except ValueError:
+            messagebox.showerror("エラー", "日付は YYYY-MM-DD 形式で入力してください。")
+            return
+
+        # コントローラーの validate_product を呼び出し
+        if self.controller.validate_product(p_id, p_name, c_name, deliv_date, dead_date, d_id):
+            messagebox.showinfo("成功", "登録が完了しました。")
+            self.root.destroy()
+        else:
+            messagebox.showerror("エラー", "登録内容に不備があります。コンソールを確認してください。")
+
         
     def _on_back_clicked(self):
         """「戻る」ボタンが押された時に初期画面に戻る"""
