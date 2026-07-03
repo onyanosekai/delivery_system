@@ -21,6 +21,7 @@ class UserController:
         # 作成してもらった check_password(password) メソッドをここで呼び出す
         # 入力された平文パスワードをハッシュ化して比較
         return admin.check_password(password)
+        
 
     def find_admin(self, admin_id: int) -> Administrator:
         """
