@@ -1,6 +1,7 @@
 import tkinter as tk
 from app.views.initial_page import InitialPage
-from app.controllers.product_controller import ProductController
+# ★ ProductController から UserController に変更します
+from app.controllers.User_controller import UserController
 
 def main():
     # 1. ルートウィンドウの作成
@@ -9,9 +10,13 @@ def main():
     root.geometry("500x400")
 
     # 2. 初期画面（InitialPage）の呼び出し
-    # 各画面の遷移制御やコントローラーの初期化は、InitialPageや各View/Controllerで行います
-    controller = ProductController()
+    # ★ ここで画面遷移の機能を持っている UserController を生成して渡します！
+    controller = UserController()
+    
+    # UserControllerのインスタンスに root や initial_page の情報を持たせる
+    controller.root = root
     app = InitialPage(root, controller)
+    controller.initial_page = app
 
     # 3. メインループの実行
     root.mainloop()

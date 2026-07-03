@@ -1,5 +1,5 @@
-
 from app.models.Administrator import Administrator
+from app.views.login_page import LoginPage
 
 class UserController:
     def __init__(self):
@@ -22,6 +22,16 @@ class UserController:
         # 入力された平文パスワードをハッシュ化して比較
         return admin.check_password(password)
         
+    def showAdminLoginPage(self):
+        self.initial_page.clear_frame()
+        self.login_view = LoginPage(self.root, self)
+
+    def show_initial_page(self):
+        from app.views.initial_page import InitialPage
+        
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        self.initial_page = InitialPage(self.root, self)
 
     def find_admin(self, admin_id: int) -> Administrator:
         """

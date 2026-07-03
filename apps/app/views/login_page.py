@@ -100,13 +100,17 @@ class LoginPage:
     # ==========================================
     def _on_back_clicked(self):
         """「戻る」ボタンが押された時に画面を initial_page に切り替える"""
-        # 現在の画面のウィジェット（ラベルやボタンなど）をクリアする必要がある場合
-        #（コントローラー側でクリア処理をしているなら不要です）
-        
-        # コントローラー側の「初期画面に戻るメソッド」を呼び出す
-        # ※コントローラー側の実際のメソッド名（例: show_initial_page, back_to_initial など）に書き換えてください。
+        # コントローラーにメソッドがあるか安全に確認して呼び出す
         if hasattr(self.controller, 'show_initial_page'):
             self.controller.show_initial_page()
+        else:
+            # 見つからない場合はエラーを表示して処理を止める（後ろの強制呼び出しを削除）
+            import tkinter.messagebox as messagebox
+            messagebox.showerror(
+                "エラー", 
+                f"controller ({type(self.controller).__name__}) に\n"
+                "前のページが見つかりません。\n"
+            )
 
     def display(self):
         """画面を表示するための補助メソッド"""
