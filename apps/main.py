@@ -1,6 +1,6 @@
 import tkinter as tk
-# クラス図とディレクトリ構成に基づき、初期画面のビューをインポートします
 from app.views.initial_page import InitialPage
+from app.controllers.product_controller import ProductController
 
 def main():
     # 1. ルートウィンドウの作成
@@ -10,7 +10,8 @@ def main():
 
     # 2. 初期画面（InitialPage）の呼び出し
     # 各画面の遷移制御やコントローラーの初期化は、InitialPageや各View/Controllerで行います
-    app = InitialPage(root)
+    controller = ProductController()
+    app = InitialPage(root, controller)
 
     # 3. メインループの実行
     root.mainloop()

@@ -16,7 +16,7 @@ class SerchPage:
         self.root.geometry("450x350")
         
         # タイトルラベル
-        self.label_title = tk.Label(root, text="商品検索・受領要求", font=("Arial", 14, "bold"))
+        self.label_title = tk.Label(root, text="商品検索", font=("Arial", 14, "bold"))
         self.label_title.pack(pady=15)
         
         # --- 入力項目の配置 ---
@@ -48,49 +48,8 @@ class SerchPage:
             command=self._on_search_clicked
         )
         self.btn_search.pack(side="left", padx=10)
-        
-        # 受領要求ボタン（requestReceive を実行）
-        self.btn_receive = tk.Button(
-            self.btn_frame, 
-            text="受領要求を送信", 
-            bg="darkgreen", 
-            fg="white", 
-            font=("Arial", 10, "bold"),
-            width=15,
-            command=self.requestReceive
-        )
-        self.btn_receive.pack(side="left", padx=10)
-
-    def inputProductInfo(self, customer_name: str, item_number: str) -> None:
-        """
-        クラス図にある inputProductInfo メソッド
-        入力された検索条件を productController の seach 処理へ引き渡す
-        """
-        # クラス図の「seach」の点線矢印に相当する処理
-        if hasattr(self.controller, 'seachItems'): # コントローラー側の検索メソッド（図内はseachitems）
-            self.controller.seachItems(item_number, customer_name)
-        else:
-            print(f"[Debug] productControllerへ検索要求: 顧客名={customer_name}, 商品番号={item_number}")
-            
-        messagebox.showinfo("検索", "検索要求を送信しました。")
-
-    def requestReceive(self) -> None:
-        """
-        クラス図にある requestReceive メソッド
-        受領要求アクションを productController へ通知する
-        """
-        # クラス図の「confirmReceive」の点線矢印（左側）に相当する処理
-        if hasattr(self.controller, 'confirmReceive'):
-            self.controller.confirmReceive()
-        else:
-            print("[Debug] productController.confirmReceive() へ受領要求を通知しました。")
-            
-        messagebox.showinfo("受領要求", "受領要求をコントローラーへ通知しました。")
 
     def _on_search_clicked(self):
-        """
-        「商品を検索」ボタンが押された時の内部処理
-        """
         customer_name = self.entry_customer.get().strip()
         item_number = self.entry_item_num.get().strip()
         
@@ -98,9 +57,19 @@ class SerchPage:
             messagebox.showwarning("入力エラー", "顧客名と商品番号の両方を入力してください。")
             return
             
-        # クラス図の指定通り、メソッドに入力データを渡して実行
         self.inputProductInfo(customer_name, item_number)
 
-    def display(self):
-        """画面を表示するための補助メソッド"""
-        self.root.mainloop()
+    def search_product(self, customer_name: str, item_number: str) -> None:
+        from app.controllers.product_controller import ProductController
+        product = self.controller.search_items(self.controller.products, item_number, customer_name)
+        
+        # 2. 結果による分岐
+        if product is not None:
+            # 見つかった場合：現在のフレームを破棄して次の画面へ
+            self.frame.destroy()
+            
+            from app.views.receive_page import ReceivePage
+            ReceivePage(self.root, self.controller, product)
+            print("検索成功！次の画面へ遷移します。")
+        else:
+            messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")

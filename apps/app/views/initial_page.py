@@ -7,6 +7,8 @@ from app.views.seach_page import SerchPage
 from app.views.login_page import LoginPage
 from app.views.Registration_page import RegistrationPage
 from app.views.info_registration_page import InfoRegistrationPage
+from app.controllers.product_controller import ProductController
+from app.controllers.User_controller import UserController
 
 class InitialPage:
     def __init__(self, root, controller=None):
