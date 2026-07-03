@@ -1,50 +1,52 @@
 import tkinter as tk
 from tkinter import messagebox
 
+# クラス図とディレクトリ構成に基づいて各ビューをインポートします
+# （※フォルダの画像にあった 'seach_page' というファイル名に仮で合わせています）
+from app.views.seach_page import SerchPage
+from app.views.login_page import LoginPage
+from app.views.Registration_page import RegistrationPage
+from app.views.info_registration_page import InfoRegistrationPage
+
 class InitialPage:
     def __init__(self, root, controller=None):
-        """
-        初期化メソッド
-        :param root: Tkinterのメインウィンドウ
-        :param controller: 必要に応じて全体のコントローラーを保持
-        """
         self.root = root
         self.controller = controller
         
         # 画面の基本設定
         self.root.title("初期メニュー画面")
         self.root.geometry("400x350")
+
+        # --- 画面切り替え用の土台（フレーム）を作成 ---
+        self.frame = tk.Frame(self.root)
+        self.frame.pack(fill="both", expand=True)
         
-        # タイトルラベル
-        self.label_title = tk.Label(root, text="配送管理システム メニュー", font=("Arial", 14, "bold"))
+        # タイトルラベル（rootではなく、self.frameに配置します）
+        self.label_title = tk.Label(self.frame, text="配送管理システム メニュー", font=("Arial", 14, "bold"))
         self.label_title.pack(pady=20)
         
-        # --- メニューボタンの配置 ---
+        # --- メニューボタンの配置（すべてself.frameに配置） ---
         
-        # 1. 検索画面へのボタン
         self.btn_search = tk.Button(
-            root, text="商品検索画面を開く", width=25, height=2,
+            self.frame, text="商品検索画面を開く", width=25, height=2,
             command=self.showSearchPage
         )
         self.btn_search.pack(pady=5)
         
-        # 2. ログイン画面へのボタン
         self.btn_login = tk.Button(
-            root, text="管理者ログイン画面を開く", width=25, height=2,
+            self.frame, text="管理者ログイン画面を開く", width=25, height=2,
             command=self.showLoginPage
         )
         self.btn_login.pack(pady=5)
         
-        # 3. ユーザー登録（管理者登録）画面へのボタン
         self.btn_register = tk.Button(
-            root, text="管理者登録画面を開く", width=25, height=2,
+            self.frame, text="管理者登録画面を開く", width=25, height=2,
             command=self.showUserRegistrationPage
         )
         self.btn_register.pack(pady=5)
         
-        # 4. 情報登録画面へのボタン
         self.btn_info_reg = tk.Button(
-            root, text="情報登録画面を開く", width=25, height=2,
+            self.frame, text="情報登録画面を開く", width=25, height=2,
             command=self.showInfoRegistrationPage
         )
         self.btn_info_reg.pack(pady=5)
@@ -52,31 +54,28 @@ class InitialPage:
     # --- クラス図に定義されているメソッド群（画面遷移） ---
 
     def showSearchPage(self) -> None:
-        """クラス図：+ showSearchPage(): void"""
-        messagebox.showinfo("画面遷移", "検索画面へ遷移します。")
-        # TODO: ここで別のウィンドウを開く、またはメインウィンドウのコンテンツを書き換える
-        # 例: SearchPage(tk.Toplevel(self.root), self.controller)
+        """検索画面へ遷移"""
+        self.frame.destroy() # 現在の画面（土台）を消す
+        SerchPage(self.root, self.controller) # 次の画面を呼び出す
 
     def showLoginPage(self) -> None:
-        """クラス図：+ showLoginPage(): void"""
-        messagebox.showinfo("画面遷移", "ログイン画面へ遷移します。")
-        # 例: LoginPage(tk.Toplevel(self.root), self.controller)
+        """ログイン画面へ遷移"""
+        self.frame.destroy()
+        LoginPage(self.root, self.controller)
 
     def showUserRegistrationPage(self) -> None:
-        """クラス図：+ showUserRegistrationPage(): void"""
-        messagebox.showinfo("画面遷移", "管理者登録画面へ遷移します。")
-        # 例: RegistrationPage(tk.Toplevel(self.root), self.controller)
+        """管理者登録画面へ遷移"""
+        self.frame.destroy()
+        RegistrationPage(self.root, self.controller)
 
     def showInfoRegistrationPage(self) -> None:
-        """クラス図：+ showInfoRegistrationPage(): void"""
-        messagebox.showinfo("画面遷移", "配達登録画面へ遷移します。")
-        # さっき作った InfoRegistrationPage を呼び出すイメージ
+        """配達登録画面へ遷移"""
+        self.frame.destroy()
+        InfoRegistrationPage(self.root, self.controller)
 
     def display(self):
-        """画面を起動するメソッド"""
         self.root.mainloop()
 
-# 単体テスト用のコード（このファイルを直接実行した時だけ動く）
 if __name__ == "__main__":
     root = tk.Tk()
     app = InitialPage(root)
