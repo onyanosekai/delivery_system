@@ -1,7 +1,14 @@
 import datetime
+import json
+import os
+from typing import List, Optional
+from apps.app.models.Product import Product
 
 
 class ProductController:
+    PRODUCT_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Product.json")
+    DELETED_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Deleted_product.json")
+    
 
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
         if not product_id or not product_name or not customer_name or not delivery_date or not deadline or not driver_id:
@@ -38,6 +45,15 @@ class ProductController:
                 return product
         return None
 
-    def confirm_delete(self,product): 
-        
-        pass
+    def confirm_delete(self, products: List[Product], target_product: Product) -> bool:
+        """
+        商品の削除確認と削除実行を行います。
+        """
+        # UI側で「本当に削除しますか？」という確認が入る前提のロジック
+        if target_product in products:
+            products.remove(target_product)
+            print(f"success: 商品名「{target_product.product_name}」のデータを削除しました。")
+            return True
+        else:
+            print("error: 削除対象の商品が見つかりません。")
+            return False
