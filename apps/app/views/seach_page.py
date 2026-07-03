@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from app.controllers.product_controller import ProductController
 
 class SerchPage:
     def __init__(self, root, controller):
@@ -60,8 +59,8 @@ class SerchPage:
             
         self.inputProductInfo(customer_name, item_number)
 
-    def inputProductInfo(self, customer_name: str, item_number: str) -> None:
-        
+    def search_product(self, customer_name: str, item_number: str) -> None:
+        from app.controllers.product_controller import ProductController
         product = self.controller.search_items(self.controller.products, item_number, customer_name)
         
         # 2. 結果による分岐

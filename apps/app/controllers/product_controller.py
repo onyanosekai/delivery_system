@@ -51,10 +51,6 @@ class ProductController:
 
     #==============================削除処理=========================================
     def confirm_delete(self, products: List[Product], target_product: Product) -> bool:
-        """
-        商品の削除確認と削除実行を行います。
-        """
-        # UI側で「本当に削除しますか？」という確認が入る前提のロジック
         if target_product in products:
             products.remove(target_product)
             print(f"success: 商品名「{target_product.product_name}」のデータを削除しました。")
@@ -65,8 +61,5 @@ class ProductController:
         
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
-        """
-        商品の受取処理を行います。
-        """
         product.status = "受取り済み"
         print(f"success: 商品名「{product.product_name}」の受取が完了しました。")
