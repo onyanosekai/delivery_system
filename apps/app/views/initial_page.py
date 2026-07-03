@@ -53,23 +53,23 @@ class InitialPage:
 
     def showSearchPage(self) -> None:
         """クラス図：+ showSearchPage(): void"""
-        messagebox.showinfo("画面遷移", "SearchPage（検索画面）へ遷移します。")
+        messagebox.showinfo("画面遷移", "検索画面へ遷移します。")
         # TODO: ここで別のウィンドウを開く、またはメインウィンドウのコンテンツを書き換える
         # 例: SearchPage(tk.Toplevel(self.root), self.controller)
 
     def showLoginPage(self) -> None:
         """クラス図：+ showLoginPage(): void"""
-        messagebox.showinfo("画面遷移", "LoginPage（ログイン画面）へ遷移します。")
+        messagebox.showinfo("画面遷移", "ログイン画面へ遷移します。")
         # 例: LoginPage(tk.Toplevel(self.root), self.controller)
 
     def showUserRegistrationPage(self) -> None:
         """クラス図：+ showUserRegistrationPage(): void"""
-        messagebox.showinfo("画面遷移", "RegistrationPage（管理者登録画面）へ遷移します。")
+        messagebox.showinfo("画面遷移", "管理者登録画面へ遷移します。")
         # 例: RegistrationPage(tk.Toplevel(self.root), self.controller)
 
     def showInfoRegistrationPage(self) -> None:
         """クラス図：+ showInfoRegistrationPage(): void"""
-        messagebox.showinfo("画面遷移", "InfoRegistrationPage（情報登録画面）へ遷移します。")
+        messagebox.showinfo("画面遷移", "配達登録画面へ遷移します。")
         # さっき作った InfoRegistrationPage を呼び出すイメージ
 
     def display(self):
