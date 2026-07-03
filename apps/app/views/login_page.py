@@ -49,7 +49,17 @@ class LoginPage:
             font=("Arial", 11, "bold"),
             command=self._on_login_clicked
         )
-        self.btn_login.pack(pady=20)
+        self.btn_login.pack(pady=10)
+
+        self.btn_back = tk.Button(
+            root,
+            text="戻る",
+            bg="gray",          # ログインボタンと区別しやすい色に
+            fg="white",
+            font=("Arial", 11, "bold"),
+            command=self._on_back_clicked # クリック時に実行するメソッド
+        )
+        self.btn_back.pack(pady=5)
 
     def inputLoginInfo(self, admin_id: str, name: str, password: str) -> None:
         """
@@ -85,6 +95,18 @@ class LoginPage:
             
         # クラス図の指定通り、inputLoginInfo メソッドに入力データを渡して実行
         self.inputLoginInfo(admin_id, name, password)
+
+    # ★ 追加: 「戻る」ボタンが押された時の内部処理
+    # ==========================================
+    def _on_back_clicked(self):
+        """「戻る」ボタンが押された時に画面を initial_page に切り替える"""
+        # 現在の画面のウィジェット（ラベルやボタンなど）をクリアする必要がある場合
+        #（コントローラー側でクリア処理をしているなら不要です）
+        
+        # コントローラー側の「初期画面に戻るメソッド」を呼び出す
+        # ※コントローラー側の実際のメソッド名（例: show_initial_page, back_to_initial など）に書き換えてください。
+        if hasattr(self.controller, 'show_initial_page'):
+            self.controller.show_initial_page()
 
     def display(self):
         """画面を表示するための補助メソッド"""
