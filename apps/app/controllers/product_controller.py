@@ -2,7 +2,7 @@ import datetime
 import json
 import os
 from typing import List, Optional
-from apps.app.models.Product import Product
+from app.models.Product import Product
 
 
 class ProductController:

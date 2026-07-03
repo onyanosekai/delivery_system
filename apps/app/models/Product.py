@@ -1,6 +1,6 @@
 # product.py
 import datetime
-from typing import Lists
+from typing import List
 
 class Product:
     def __init__(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
