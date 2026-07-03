@@ -17,9 +17,6 @@ class ProductController:
     
     #=================================登録=========================================
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
-        if not product_id or not product_name or not customer_name or not delivery_date or not deadline or not driver_id:
-            print("error: 全ての項目を入力してください。")
-            return False
 
         if len(product_id) != 11:
             print("error: 商品番号は11桁である必要があります。")
@@ -55,9 +52,9 @@ class ProductController:
     
 
     #==============================削除処理=========================================
-    def confirm_delete(self, products: List[Product], target_product: Product) -> bool:
-        if target_product in products:
-            products.remove(target_product)
+    def confirm_delete(self, target_product: Product) -> bool:
+        if target_product in self.products:
+            self.products.remove(target_product)
             print(f"success: 商品名「{target_product.product_name}」のデータを削除しました。")
             return True
         else:
