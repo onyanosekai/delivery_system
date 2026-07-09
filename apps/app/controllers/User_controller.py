@@ -15,15 +15,12 @@ class UserController:
         """
         管理者のログイン認証を行うメソッド
         """
-        # 管理者ID（数値）でエンティティを検索
         admin = self.find_admin(admin_id)
         
         # 見つからなければFalse
         if admin is None:
             return False
             
-        # 作成してもらった check_password(password) メソッドをここで呼び出す
-        # 入力された平文パスワードをハッシュ化して比較
         return admin.check_password(password)
         
     def showAdminLoginPage(self):
@@ -49,11 +46,6 @@ class UserController:
 
     # 2. ユーザー登録処理 (仕様書準拠 ＋ エンティティ生成)
     def validate_admin(self, admin_id: str, name: str, password: str) -> dict:
-        """
-        ユースケース：ユーザー情報を登録する
-        仕様書のバリデーションを行い、クリアしたら Administrator インスタンスを生成して保存する
-        """
-        # パスワード英数字混合8文字以上チェック
         is_length_ok = len(password) >= 8
         has_letter = any(char.isalpha() for char in password)
         has_digit = any(char.isdigit() for char in password)
@@ -78,42 +70,7 @@ class UserController:
                 "message": "管理者IDは数値で入力してください。"
             }
         
-
-    def registeruser(self, admin_id: str, name: str, password: str) -> dict:
-        # 管理者をユーザー一覧に登録する
-        # 作成してもらった Administrator の __init__ にデータを渡してインスタンス化
-        # これによって、内部で自動的にパスワードがハッシュ化されて保存されます
-        new_admin = Administrator(
-            admin_id=admin_id,
-            admin_name=name,
-            password=password
-        )
-        
-        # コントローラーの管理リストに追加
-        self.admin_list.append(new_admin)
-        file_path = self.ADMIN_JSON_PATH
-        # 既存データ読込
-        if os.path.exists(file_path):
-            with open(file_path, "r", encoding="utf-8") as f:
-                try:
-                    admins = json.load(f)
-                except json.JSONDecodeError:
-                    admins = []
-        else:
-            admins = []
-        
-        # 新しい管理者を追加
-        admins.append({
-            "admin_id": new_admin.admin_id,
-            "admin_name": new_admin.admin_name,
-            "password": new_admin.password
-        })
-        
-        # JSONへ書込
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(admins, f, ensure_ascii=False, indent=4)
-
-        return {
-            "status": "success", 
-            "message": f"管理者「{name}」さんの登録が完了しました！"
-        }
+def register_admin(self):
+        data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
+        with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)

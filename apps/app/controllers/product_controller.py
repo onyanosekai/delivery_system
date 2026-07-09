@@ -13,6 +13,23 @@ class ProductController:
     def __init__(self):
         # コントローラーがデータリストを保持するようにする
         self.products: List[Product] = []
+        self.load_products_from_json()
+
+    #=============================Product.jsonからの読み込み========================================
+    def load_products_from_json(self):
+        if not os.path.exists(self.PRODUCT_JSON_PATH):
+            return
+
+        with open(self.PRODUCT_JSON_PATH, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+                self.products = [
+                    Product.from_dict(item)
+                    for item in data
+                ]
+            except json.JSONDecodeError:
+                self.products = []
+
 
     #=================================登録=========================================
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
@@ -40,20 +57,37 @@ class ProductController:
 
         return True
     
-    
+    #=============================削除した商品をDeleted_product.jsonに保存=========================================
+    def save_deleted_product(self, product: Product):
+
+        if os.path.exists(self.DELETED_JSON_PATH):
+            with open(self.DELETED_JSON_PATH, "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    data = []
+        else:
+            data = []
+
+        data.append(product.to_dict())
+
+        with open(self.DELETED_JSON_PATH, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
+
     #==============================商品検索=========================================
     def search_items(self,product_id: str,customer_name: str):
         for product in self.products:
             if product.product_id == product_id and product.customer_name == customer_name:
                 return product
-            else:
-                return None
-    
+        return None
 
     #==============================削除処理=========================================
     def confirm_delete(self, target_product: Product) -> bool:
         if target_product in self.products:
+            self.save_deleted_product(target_product)
             self.products.remove(target_product)
+            self.save_products_to_json()
             messagebox.showinfo("成功", f"商品名「{target_product.product_name}」のデータを削除しました。")
             return True
         else:
@@ -63,7 +97,9 @@ class ProductController:
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
         product.status = "受取り済み"
+        self.save_products_to_json()
 
+    #=============================商品登録=========================================
     def register_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
         if not self.validate_product(product_id, product_name, customer_name, delivery_date, deadline, driver_id):
             return False

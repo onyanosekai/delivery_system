@@ -13,3 +13,18 @@ class Administrator:
     
     def __str__(self):
         return f"Admin({self.admin_id}, {self.admin_name})"
+    
+@classmethod
+def from_dict(cls, data: dict):
+        return cls(
+            admin_id=data["admin_id"],
+            admin_name=data["admin_name"],
+            password=data["password"]
+        )
+
+def to_dict(self) -> dict:
+        return {
+            "admin_id": self.admin_id,
+            "admin_name": self.admin_name,
+            "password": self.password_hash
+        }

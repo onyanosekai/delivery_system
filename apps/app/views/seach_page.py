@@ -78,11 +78,5 @@ class SerchPage:
     def inputProductInfo(self, customer_name: str, item_number: str) -> None:
         product = self.product_controller.search_items(item_number, customer_name)
         
-        # 2. 結果による分岐
-        if product is not None:
-            # 見つかった場合：現在のフレームを破棄して次の画面へ
-            self.frame.destroy()
-            ReceivePage(self.root, self.product_controller, product)
-            
-        else:
+        if not product:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")
