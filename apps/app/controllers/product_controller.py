@@ -34,6 +34,10 @@ class ProductController:
         if delivery_date < datetime.date.today():
             messagebox.showerror("エラー", "過去の日付は登録できません。")
             return False
+        if delivery_date > datetime.date.today():
+            messagebox.showerror("エラー", "未来の日付は登録できません。")
+            return False
+
 
         return True
     
