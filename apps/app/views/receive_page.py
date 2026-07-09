@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from app.controllers.product_controller import ProductController
 
 class ReceivePage:
     def __init__(self, root, controller):
@@ -10,10 +11,11 @@ class ReceivePage:
         """
         self.root = root
         self.controller = controller  # クラス図で繋がっている productController を保持
-        
+        self.product_controller = ProductController()  # ProductController のインスタンスも保持
+
         # 画面の基本設定
         self.root.title("商品の受領確認画面")
-        self.root.geometry("400x250")
+        self.root.geometry("400x400")
         
         # タイトルラベル
         self.label_title = tk.Label(root, text="以下の商品を受領（確認）します", font=("Arial", 14, "bold"))

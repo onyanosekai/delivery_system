@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from app.controllers.product_controller import ProductController
 
 class DeletedProductListPage:
     def __init__(self, root, controller):
@@ -10,7 +11,7 @@ class DeletedProductListPage:
         """
         self.root = root
         self.controller = controller
-        
+        self.product_controller = ProductController()  # ProductController のインスタンスも保持
         # 画面の基本設定
         self.root.title("削除済み商品一覧画面")
         self.root.geometry("600x400")

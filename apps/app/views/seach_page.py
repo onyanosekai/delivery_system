@@ -1,12 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
+from app.controllers.product_controller import ProductController
+from app.views.receive_page import ReceivePage
 
 class SerchPage:
     def __init__(self, root, controller):
         
         self.root = root
         self.controller = controller  # クラス図で繋がっている productController を保持
-        
+        self.product_controller = ProductController()  # ProductController のインスタンスを作成
+
         # 画面の基本設定
         self.root.title("商品検索画面")
         self.root.geometry("450x350")
@@ -73,15 +76,13 @@ class SerchPage:
             self.controller.show_initial_page()
     
     def inputProductInfo(self, customer_name: str, item_number: str) -> None:
-        from app.controllers.product_controller import ProductController
-        product = self.controller.search_items(item_number, customer_name)
+        product = self.product_controller.search_items(item_number, customer_name)
         
         # 2. 結果による分岐
         if product is not None:
             # 見つかった場合：現在のフレームを破棄して次の画面へ
             self.frame.destroy()
-            from app.views.receive_page import ReceivePage
-            ReceivePage(self.root, self.controller, product)
+            ReceivePage(self.root, self.product_controller, product)
             
         else:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")

@@ -1,15 +1,20 @@
 import tkinter as tk
 from tkinter import messagebox
+from app.controllers import User_controller
+from app.controllers import product_controller
+
+
 
 class RegistrationPage:
     def __init__(self, root, controller):
         """
         初期化メソッド
         :param root: Tkinterのメインウィンドウ
-        :param controller: userController のインスタンス
+        :param controller: User_controller のインスタンス
         """
         self.root = root
         self.controller = controller  # クラス図で繋がっている userController を保持
+        self.product_controller = product_controller.ProductController()  # ProductController のインスタンスも保持
         
         # 画面の基本設定
         self.root.title("管理者アカウント新規登録画面")
@@ -63,21 +68,11 @@ class RegistrationPage:
         self.btn_back.pack(pady=5)
 
     def inputUserInfo(self, admin_id: str, name: str, password: str) -> None:
-        """
-        クラス図にある inputUserInfo メソッド
-        入力された情報を userController のユーザー登録処理へ引き渡す
-        """
-        # クラス図の「registeruser」の矢印に相当する処理
-        # userController に3つの情報を渡して新規登録を依頼する
-        # ※実際の userController 側のメソッド名（registeruser 等）に合わせて呼び出します
-        if hasattr(self.controller, 'registeruser'):
-            self.controller.registeruser(admin_id, name, password)
+        if hasattr(self.controller, 'validate_admin'):
+            self.controller.validate_admin(admin_id, name, password)
         else:
             # まだコントローラー側に実装がない場合の仮ログ
             print(f"[Debug] userControllerへの新規登録要求: ID={admin_id}, Name={name}, Pass={password}")
-            
-        messagebox.showinfo("成功", "管理者アカウントの登録申請を送信しました。")
-        self.root.destroy()  # 登録要求が終わったら画面を閉じる
 
     def _on_register_clicked(self):
         """
@@ -92,9 +87,9 @@ class RegistrationPage:
         if not admin_id or not name or not password:
             messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
             return
-            
+
         # クラス図の指定通り、inputUserInfo メソッドに入力データを渡して実行
-        self.inputUserInfo(admin_id, name, password)
+        self.registeruser(admin_id, name, password)
 
     def _on_back_clicked(self):
         """「戻る」ボタンが押された時に初期画面に戻る"""

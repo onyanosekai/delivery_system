@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from datetime import datetime
+from app.controllers.product_controller import ProductController
 
 class DeletePage:
     def __init__(self, root, controller):
@@ -11,7 +12,8 @@ class DeletePage:
         """
         self.root = root
         self.controller = controller  # クラス図で繋がっているコントローラーを保持
-        
+        self.product_controller = ProductController()  # ProductController のインスタンスも保持
+
         # 画面の基本設定
         self.root.title("削除確認画面")
         self.root.geometry("400x250")

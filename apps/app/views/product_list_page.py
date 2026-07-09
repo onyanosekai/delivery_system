@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+from app.controllers.product_controller import ProductController
 
 class ProductListPage:
     def __init__(self, root, controller):
@@ -10,7 +11,8 @@ class ProductListPage:
         """
         self.root = root
         self.controller = controller  # クラス図で繋がっている productController を保持
-        
+        self.product_controller = ProductController()  # ProductController のインスタンスも保持 
+
         # 画面の基本設定
         self.root.title("商品一覧画面")
         self.root.geometry("600x450")

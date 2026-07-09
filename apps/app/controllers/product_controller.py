@@ -1,7 +1,7 @@
 import datetime
 import json
 import os
-import tkinter as messagebox
+from tkinter import messagebox
 from typing import List, Optional
 from app.models.Product import Product
 
@@ -14,8 +14,6 @@ class ProductController:
         # コントローラーがデータリストを保持するようにする
         self.products: List[Product] = []
 
-    
-    
     #=================================登録=========================================
     def validate_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
 
@@ -32,28 +30,24 @@ class ProductController:
             return False
 
         if delivery_date < datetime.date.today():
-            messagebox.showerror("エラー", "過去の日付は登録できません。")
+            messagebox.showerror("エラー", "本日の日付を入力してください。")
             return False
         if delivery_date > datetime.date.today():
-            messagebox.showerror("エラー", "未来の日付は登録できません。")
+            messagebox.showerror("エラー", "本日の日付を入力してください。")
             return False
+        
 
 
         return True
     
-    #===============================期限チェック=========================================
-    def check_deadline(self,deadline):
-        if datetime.date.today() > deadline:
-            messagebox.showerror("エラー", "受け取り期限が過ぎています。")
-            return False
-        return True
     
     #==============================商品検索=========================================
     def search_items(self,product_id: str,customer_name: str):
         for product in self.products:
             if product.product_id == product_id and product.customer_name == customer_name:
                 return product
-        return None
+            else:
+                return None
     
 
     #==============================削除処理=========================================
@@ -69,4 +63,17 @@ class ProductController:
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
         product.status = "受取り済み"
-        messagebox.showinfo(""f"商品名「{product.product_name}」の受取が完了しました。")
+
+    def register_product(self, product_id, product_name, customer_name, delivery_date, deadline, driver_id):
+        if not self.validate_product(product_id, product_name, customer_name, delivery_date, deadline, driver_id):
+            return False
+        product = Product(product_id, product_name, customer_name, delivery_date, deadline, driver_id)
+        self.products.append(product)
+        self.save_products_to_json()  # 登録後にJSONに保存
+        return True
+
+    #=============================商品のProduct.jsonへの保存========================================
+    def save_products_to_json(self):
+        data = [product.to_dict() for product in self.products]
+        with open(self.PRODUCT_JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
