@@ -70,7 +70,28 @@ class UserController:
                 "message": "管理者IDは数値で入力してください。"
             }
         
-def register_admin(self):
-        data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
-        with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
-            json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)
+    def register_admin(self):
+            data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
+            with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
+                json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)
+
+    def register_User(self, admin_id: str, name: str, password: str) -> None:
+        """
+        新規管理者を登録するメソッド
+        """
+        validation_result = self.validate_admin(admin_id, name, password)
+        
+        if validation_result is not None:
+            # バリデーションエラーがあればメッセージを表示して終了
+            print(validation_result["message"])
+            return
+        
+        # バリデーションOKならAdministratorオブジェクトを生成してリストに追加
+        new_admin = Administrator(int(admin_id), name, password)
+        self.admin_list.append(new_admin)
+        
+        # JSONファイルに保存
+        self.register_admin()
+        
+        print(f"管理者ID「{admin_id}」の新規登録が完了しました。")
+        

@@ -84,12 +84,13 @@ class RegistrationPage:
         password = self.entry_pass.get().strip()
         
         # 簡単な未入力チェック（バリデーション）
-        if not admin_id or not name or not password:
-            messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
-            return
+        if self.controller.register_User(admin_id, name, password):
+            messagebox.showinfo("成功", "登録が完了しました。")
+            self.controller.show_initial_page()
 
-        # クラス図の指定通り、inputUserInfo メソッドに入力データを渡して実行
-        self.registeruser(admin_id, name, password)
+        else:# クラス図の指定通り、inputUserInfo メソッドに入力データを渡して実行
+            messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
+            return            
 
     def _on_back_clicked(self):
         """「戻る」ボタンが押された時に初期画面に戻る"""
