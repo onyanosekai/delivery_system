@@ -8,12 +8,10 @@ import tkinter as tk
 class UserController:
     ADMIN_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Administrator.json")
 
-    def __init__(self, root):
+    def __init__(self):
         # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []
         self.load_admins()  # JSONファイルから管理者情報を読み込む
-        self.root = root  # Tkinterのメインウィンドウを保持する
-        self.initial_page = None  # 初期画面のインスタンスを保持する
 
     def load_admins(self):
         if os.path.exists(self.ADMIN_JSON_PATH):
