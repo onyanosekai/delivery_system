@@ -50,6 +50,10 @@ class ProductController:
             messagebox.showerror("エラー", "納品日は本日の日付以降である必要があります。")
             return False
         
+        if deadline < delivery_date:
+            messagebox.showerror("エラー", "受け取り期限は納品日以降である必要があります。")
+            return False
+
         if not driver_id.isdigit():
             messagebox.showerror("エラー", "配達員IDは数字のみ入力してください。")
             return False
@@ -94,6 +98,12 @@ class ProductController:
             messagebox.showerror("エラー", "削除対象の商品が見つかりません。")
             return False
         
+    #=============================受け取り期限切れの表示=========================================
+    def get_expired_products(self) -> List[Product]:
+        today = datetime.date.today()
+        expired_products = [product for product in self.products if product.deadline < today]
+        return expired_products
+
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
         print("変更前のステータス:", product.status)  # デバッグ用
