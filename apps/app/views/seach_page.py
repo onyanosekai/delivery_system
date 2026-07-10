@@ -81,4 +81,9 @@ class SerchPage:
         if not product:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")
         
-        self.RegisterPage = ReceivePage(self.root, self.controller, product)
+        else:
+            for widget in self.root.winfo_children():
+                widget.destroy()  # 現在のウィジェットをすべて削除
+            # 商品が見つかった場合、受領画面を表示
+            ReceivePage(self.root, self.controller, product)
+
