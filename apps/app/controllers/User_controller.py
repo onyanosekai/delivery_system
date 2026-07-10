@@ -29,38 +29,28 @@ class UserController:
 
     # 1. ログイン処理 
     def login(self, admin_id: int, admin_name: str, password: str) -> bool:
-        """すべてのアカウントで、正しくJSONファイルから認証を行うメソッド"""
+        """すべてのアカウントをJSONファイルから正しくループで探して認証する"""
         import json
         import hashlib
         import os
 
-        # 1. 画面から入力された生パスワードをハッシュ化
         current_input_hash = hashlib.sha256(password.encode()).hexdigest()
         
-        # 2. キャッシュを疑い、毎回直接JSONファイルを綺麗に読み込む
         if os.path.exists(self.ADMIN_JSON_PATH):
             with open(self.ADMIN_JSON_PATH, "r", encoding="utf-8") as f:
                 try:
                     admin_data_list = json.load(f)
                     
-                    # 3. JSON内の全ユーザーをループで回して、IDと名前が一致する人を探す
+                    # JSONに保存されている全ユーザーを一人ずつチェック
                     for user in admin_data_list:
-                        # 入力されたID・名前と一致するか（型を文字列に揃えて安全に比較）
                         if str(user.get("admin_id")) == str(admin_id) and str(user.get("admin_name")) == str(admin_name):
                             json_hash = user.get("password")
                             
-                            print(f"[Debug] ログイン試行ユーザーを発見: {admin_name}")
-                            print(f"[Debug] 入力ハッシュ: {current_input_hash}")
-                            print(f"[Debug] JSONハッシュ : {json_hash}")
-                            
-                            # ハッシュ値が一致すればログイン成功！
+                            # ハッシュ値が一致すればログイン成功
                             if json_hash == current_input_hash:
                                 return True
-                                
                 except Exception as e:
-                    print(f"[Debug] ログイン処理中のエラー: {e}")
-                    
-        # 見つからない、またはパスワード不一致なら失敗
+                    print(f"[Debug] ログイン読み込みエラー: {e}")
         return False
         
     def showAdminLoginPage(self):
@@ -119,19 +109,38 @@ class UserController:
             self.show_initial_page()
 
     def register_User(self, admin_id: str, name: str, password: str) -> None:
+        import json
+        import hashlib
+        import os
+
         validation_result = self.validate_admin(admin_id, name, password)
-        
         if validation_result is not None:
-            # バリデーションエラーがあればメッセージを表示して終了
             messagebox.showerror("エラー", validation_result["message"])
             return
         
-        # バリデーションOKならAdministratorオブジェクトを生成してリストに追加
-        new_admin = Administrator(int(admin_id), name, password)
-        self.admin_list.append(new_admin)
-        
-        # JSONファイルに保存
-        self.register_admin()
+        # 1. 新しいユーザーのハッシュ値を作成
+        new_password_hash = hashlib.sha256(password.encode()).hexdigest()
+        new_admin_data = {
+            "admin_id": int(admin_id),
+            "admin_name": name,
+            "password": new_password_hash
+        }
+
+        # 2. 既存の JSON ファイルを読み込む（全員分を保持するため）
+        admin_data_list = []
+        if os.path.exists(self.ADMIN_JSON_PATH):
+            with open(self.ADMIN_JSON_PATH, "r", encoding="utf-8") as f:
+                try:
+                    admin_data_list = json.load(f)
+                except json.JSONDecodeError:
+                    admin_data_list = []
+
+        # 3. リストに新しいユーザーを追記（上書きではなく追加！）
+        admin_data_list.append(new_admin_data)
+
+        # 4. JSON ファイルに全員分を綺麗に保存する
+        with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
+            json.dump(admin_data_list, f, ensure_ascii=False, indent=4)
         
         messagebox.showinfo("成功", "登録が完了しました。")
-        
+        self.show_initial_page()

@@ -59,23 +59,18 @@ class InitialPage:
         )
         self.btn_info_reg.pack(pady=5)
 
-        # ★★★ ログイン状態のときだけ「商品削除ボタン」を表示する ★★★
+        # --- 省略（情報登録ボタンの pack などの後） ---
+
+        # ★★★ ログイン状態のときだけ「商品削除ボタン」と「ログアウトボタン」を表示する ★★★
         if self.is_logged_in:
             self.btn_delete = tk.Button(
                 self.frame, text="商品削除画面を開く", width=25, height=2,
                 bg="orange", fg="white", font=("Arial", 9, "bold"),
-                command=self.showDeletePage
+                command=self.showDeletePage  
             )
             self.btn_delete.pack(pady=5)
 
-            self.btn_list = tk.Button(
-                self.frame, text="商品一覧画面を開く", width=25, height=2,
-                bg="blue", fg="white", font=("Arial", 9, "bold"),
-                command = self.showProductListPage
-            )
-            self.btn_list.pack(pady=5)
-
-            # ここから「ログアウト」ボタンを追加
+            # 👇 【ここを再追加！】ログアウトボタンを配置
             self.btn_logout = tk.Button(
                 self.frame, text="ログアウト", width=25, height=2,
                 bg="red", fg="white", font=("Arial", 9, "bold"),
