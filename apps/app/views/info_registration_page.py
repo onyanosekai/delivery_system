@@ -4,12 +4,11 @@ import datetime
 from tkinter import messagebox
 from app.controllers.product_controller import ProductController
 
-'''
+
 class Controller:
     def __init__(self, root):
         self.root = root
         self.product_controller = ProductController()
-'''
         
 class InfoRegistrationPage:
     def __init__(self, root, controller):
