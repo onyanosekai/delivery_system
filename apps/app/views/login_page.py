@@ -62,16 +62,8 @@ class LoginPage:
         self.btn_back.pack(pady=5)
 
     def inputLoginInfo(self, admin_id: str, name: str, password: str) -> None:
-        """
-        クラス図にある inputLoginInfo メソッド
-        入力された情報を userController のログイン要求処理へ引き渡す
-        """
-        # クラス図の「requestLogin」の矢印に相当する処理
-        # userController に入力された3つの情報を渡して認証を依頼する
-        # ※実際の userController 側のメソッド名に合わせて呼び出します
         if hasattr(self.controller, 'requestLogin'):
-            # 例: コントローラー側で検証をおこなう
-            self.controller.requestLogin(admin_id, name, password)
+            self.controller.login(admin_id, name, password)
         else:
             # まだコントローラー側に実装がない場合の仮ログ
             print(f"[Debug] userControllerへのログイン要求: ID={admin_id}, Name={name}, Pass={password}")
@@ -79,8 +71,15 @@ class LoginPage:
         # 本来はコントローラーの認証結果（True/False）を受けて画面を切り替えます
         messagebox.showinfo("送信完了", "ログイン要求を送信しました。")
 
+<<<<<<< HEAD
 def _on_login_clicked(self):
         """「ログイン」ボタンが押された時の内部処理"""
+=======
+    def _on_login_clicked(self):
+        """
+        「ログイン」ボタンが押された時の内部処理
+        """
+>>>>>>> a87deaa25c1c048134fd2853f999abfe21b51f94
         admin_id = self.entry_id.get().strip()
         name = self.entry_name.get().strip()
         password = self.entry_pass.get().strip()
@@ -97,10 +96,15 @@ def _on_login_clicked(self):
             messagebox.showerror("エラー", "IDは数値で入力してください。")
             return
 
+<<<<<<< HEAD
         # 1. main.pyで用意したUserControllerを使ってログイン認証を行う
         user_ctrl = self.controller  # main.pyの main() 内で controller = UserController() としているため
 
         if user_ctrl.login(int_id, password):
+=======
+        # main.pyなどから共有されている user_controller を使って認証
+        if self.controller and self.controller.login(int_id, name, password):
+>>>>>>> a87deaa25c1c048134fd2853f999abfe21b51f94
             messagebox.showinfo("成功", "ログインに成功しました！")
 
             # 2. 現在のログイン画面（土台のフレーム）を消し去る
