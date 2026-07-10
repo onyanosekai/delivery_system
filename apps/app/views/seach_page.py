@@ -80,3 +80,5 @@ class SerchPage:
         
         if not product:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")
+        
+        self.RegisterPage = ReceivePage(self.root, self.controller, product)
