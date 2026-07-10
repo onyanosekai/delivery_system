@@ -32,7 +32,7 @@ class SerchPage:
         self.entry_item_num = tk.Entry(root, width=35)
         self.entry_item_num.pack(padx=50, pady=5)
         
-        # --- ボタン配置エリア ---
+       
         self.btn_frame = tk.Frame(root)
         self.btn_frame.pack(pady=25)
         
@@ -55,7 +55,7 @@ class SerchPage:
             bg="gray",
             fg="white",
             font=("Arial", 11, "bold"),
-            command=self._on_back_clicked # 下で定義するメソッドを呼ぶ
+            command=self._on_back_clicked 
         )
         self.btn_back.pack(pady=5)
 
