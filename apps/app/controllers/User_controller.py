@@ -90,7 +90,6 @@ class UserController:
             }
         
     def register_admin(self):
-            self.load_admins()  # 最新の管理者情報を読み込む
             data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
             with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
                 json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)
