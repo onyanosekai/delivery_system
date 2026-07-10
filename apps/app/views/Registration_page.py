@@ -87,10 +87,7 @@ class RegistrationPage:
         if self.controller.register_User(admin_id, name, password):
             messagebox.showinfo("成功", "登録が完了しました。")
             self.controller.show_initial_page()
-
-        else:# クラス図の指定通り、inputUserInfo メソッドに入力データを渡して実行
-            messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
-            return            
+                        
 
     def _on_back_clicked(self):
         """「戻る」ボタンが押された時に初期画面に戻る"""
