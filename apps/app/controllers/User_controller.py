@@ -29,28 +29,38 @@ class UserController:
 
     # 1. ログイン処理 
     def login(self, admin_id: int, admin_name: str, password: str) -> bool:
-        # 1. 画面から入力されたパスワードをハッシュ化
+        """すべてのアカウントで、正しくJSONファイルから認証を行うメソッド"""
+        import json
         import hashlib
+        import os
+
+        # 1. 画面から入力された生パスワードをハッシュ化
         current_input_hash = hashlib.sha256(password.encode()).hexdigest()
         
-        # 2. メモリを無視して、直接 JSON ファイルを読み込む
-        import json
+        # 2. キャッシュを疑い、毎回直接JSONファイルを綺麗に読み込む
         if os.path.exists(self.ADMIN_JSON_PATH):
             with open(self.ADMIN_JSON_PATH, "r", encoding="utf-8") as f:
                 try:
-                    data = json.load(f)
-                    # リストの中から該当するIDのデータを探す
-                    for item in data:
-                        # JSON内のキー名に合わせて比較（admin_id が文字列か数値か両方対応）
-                        if str(item.get("admin_id")) == str(admin_id):
-                            json_hash = item.get("password")
-                            # 完全に一致したら True を返してログイン成功！
+                    admin_data_list = json.load(f)
+                    
+                    # 3. JSON内の全ユーザーをループで回して、IDと名前が一致する人を探す
+                    for user in admin_data_list:
+                        # 入力されたID・名前と一致するか（型を文字列に揃えて安全に比較）
+                        if str(user.get("admin_id")) == str(admin_id) and str(user.get("admin_name")) == str(admin_name):
+                            json_hash = user.get("password")
+                            
+                            print(f"[Debug] ログイン試行ユーザーを発見: {admin_name}")
+                            print(f"[Debug] 入力ハッシュ: {current_input_hash}")
+                            print(f"[Debug] JSONハッシュ : {json_hash}")
+                            
+                            # ハッシュ値が一致すればログイン成功！
                             if json_hash == current_input_hash:
                                 return True
+                                
                 except Exception as e:
-                    print(f"[Debug] JSON直接読み込みエラー: {e}")
-        
-        # どこにも引っかからなければ認証失敗
+                    print(f"[Debug] ログイン処理中のエラー: {e}")
+                    
+        # 見つからない、またはパスワード不一致なら失敗
         return False
         
     def showAdminLoginPage(self):
