@@ -79,51 +79,51 @@ class LoginPage:
         # 本来はコントローラーの認証結果（True/False）を受けて画面を切り替えます
         messagebox.showinfo("送信完了", "ログイン要求を送信しました。")
 
-    def _on_login_clicked(self):
-        """
-        「ログイン」ボタンが押された時の内部処理
-        """
-        # 各入力欄から文字列を取得
+def _on_login_clicked(self):
+        """「ログイン」ボタンが押された時の内部処理"""
         admin_id = self.entry_id.get().strip()
         name = self.entry_name.get().strip()
         password = self.entry_pass.get().strip()
-        
-        # 簡単な未入力チェック（バリデーション）
+
+        # 簡単な入力チェック
         if not admin_id or not name or not password:
             messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
             return
+
+        # --- ここから修正：コントローラーの認証結果で画面を切り替える ---
         try:
-            int_id = int(admin_id) # IDを数値に変換
+            int_id = int(admin_id)  # IDを数値に変換
         except ValueError:
             messagebox.showerror("エラー", "IDは数値で入力してください。")
             return
 
-        # main.pyなどから共有されている user_controller を使って認証
-        if self.controller and self.controller.user_controller.login(int_id, password):
+        # 1. main.pyで用意したUserControllerを使ってログイン認証を行う
+        user_ctrl = self.controller  # main.pyの main() 内で controller = UserController() としているため
+
+        if user_ctrl.login(int_id, password):
             messagebox.showinfo("成功", "ログインに成功しました！")
-            
-            # ★★★ ここで「ログイン成功時の遷移処理」を行います！ ★★★
-            self.root.set_menu_state(True) # (※下の補足を参照。メニューをログイン状態にする)
-            self.frame.destroy()  # ログイン画面の土台を消す
-            
-            # 循環インポートを防ぐために、ここで InitialPage をインポートして呼び出す
+
+            # 2. 現在のログイン画面（土台のフレーム）を消し去る
+            # ※もしログイン画面で self.frame を使っていなければ、画面全体を消すために
+            # カスタムした破棄処理にするか、パーツを消してください。ここでは self.frame.destroy() とします。
+            if hasattr(self, "frame"):
+                self.frame.destroy()
+            else:
+                # もし Frame を使わず root に直配置していた場合の安全策
+                for widget in self.root.winfo_children():
+                    widget.destroy()
+
+            # 3. 循環インポートを防ぐために、この関数内で InitialPage をインポート
             from app.views.initial_page import InitialPage
-            InitialPage(self.root, self.controller, is_logged_in=True)
-            
+
+            # 4. ログイン状態フラグを `is_logged_in=True` にして初期画面を開く！
+            # これにより、削除ボタンが出現した状態のメニューになります
+            app = InitialPage(self.root, self.controller, is_logged_in=True)
+
+            # 5. main.py側の参照も最新の初期画面に上書きしておく
+            self.controller.initial_page = app
+
         else:
-            messagebox.showerror("失敗", "IDまたはパスワードが違います。")
-        # クラス図の指定通り、inputLoginInfo メソッドに入力データを渡して実行
-        self.inputLoginInfo(admin_id, name, password)
-
-    # ★ 追加: 「戻る」ボタンが押された時の内部処理
-    # ==========================================
-   # 各画面の「戻る」処理の修正イメージ
-    def _on_back_clicked(self):
-        self.frame.destroy()
-        from app.views.initial_page import InitialPage
-        # ログイン状態を True にしてメニューに戻る
-        InitialPage(self.root, self.controller, is_logged_in=True)
-
-    def display(self):
-        """画面を表示するための補助メソッド"""
-        self.root.mainloop()
+            messagebox.showerror(
+                "失敗", "IDまたはパスワードが違います。"
+            )
