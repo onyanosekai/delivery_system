@@ -98,7 +98,9 @@ class ProductController:
         
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
+        print("変更前のステータス:", product.status)  # デバッグ用
         product.status = "受取り済み"
+        print("変更後のステータス:", product.status)  # デバッグ用
         self.save_products_to_json()
 
     #=============================商品登録=========================================
@@ -113,5 +115,8 @@ class ProductController:
     #=============================商品のProduct.jsonへの保存========================================
     def save_products_to_json(self):
         data = [product.to_dict() for product in self.products]
+
+        print(data)  # ←追加
+
         with open(self.PRODUCT_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)

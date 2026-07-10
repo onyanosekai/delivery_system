@@ -4,7 +4,7 @@ from app.controllers.product_controller import ProductController
 from app.models.Product import Product
 
 class ReceivePage:
-    def __init__(self, root, controller, product):
+    def __init__(self, root, controller,product_controller, product):
         """
         初期化メソッド
         :param root: Tkinterのメインウィンドウ
@@ -13,7 +13,7 @@ class ReceivePage:
         """
         self.root = root
         self.controller = controller  # クラス図で繋がっている productController を保持
-        self.product_controller = ProductController()  # ProductController のインスタンスも保持
+        self.product_controller = product_controller  # ProductController のインスタンスも保持
         self.product = product  # 受領する商品の情報
 
         # 画面の基本設定
@@ -48,7 +48,15 @@ class ReceivePage:
         )
         self.btn_confirm.pack(pady=20)
 
-   
+    def receive_product(self, product):
+        print("変更前:", product.status)
+
+        product.status = "受取り済み"
+
+        print("変更後:", product.status)
+
+        self.save_products_to_json()
+        
     def _on_confirm_clicked(self):
         """
         「受領を確定する」ボタンが押された時の内部処理

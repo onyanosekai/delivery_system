@@ -6,6 +6,6 @@
         "delivery_date": "2026-07-10",
         "deadline": "2026-07-11",
         "driver_id": 1234567897,
-        "status": "未受取"
+        "status": "受取り済み"
     }
 ]
