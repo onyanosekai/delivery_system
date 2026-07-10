@@ -16,11 +16,13 @@ class Administrator:
     
     @classmethod
     def from_dict(cls, data: dict):
-            return cls(
+            admin = cls(
                 admin_id=data["admin_id"],
                 admin_name=data["admin_name"],
                 password=data["password"]
             )
+            admin.password_hash = data["password"]  # ハッシュ化されたパスワードを直接設定
+            return admin
 
     def to_dict(self) -> dict:
             return {

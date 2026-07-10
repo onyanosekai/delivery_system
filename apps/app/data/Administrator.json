@@ -2,11 +2,21 @@
     {
         "admin_id": 38124079,
         "admin_name": "原",
-        "password": "a1fd443cc9cd38f53e4e6284601302603f8138789ca37573d7e121cb64fdbc32"
+        "password": "213b1cd6dc2794eebf5351d0bf61cb47e771d4d63860e6e3dff843559a875920"
     },
     {
         "admin_id": 38124082,
         "admin_name": "福山寛朋",
-        "password": "4adc83f72ea82a96c706c14b0bc560a036ae3f7f2341f493797685038639163c"
+        "password": "ded8095437564ad931c1fd807df7c7027ddd1afa5a16a22da37b6b3e2aa5cac5"
+    },
+    {
+        "admin_id": 38123082,
+        "admin_name": "test君",
+        "password": "d31eac009804005e509d8bdfe7e043a4b127323d5a88c2b8fd11e39507bd16ee"
+    },
+    {
+        "admin_id": 38123081,
+        "admin_name": "test君",
+        "password": "fa5271c387ad09aad2ce556bd598916f5d424441e60f1fd61a43fc421ca16c18"
     }
 ]

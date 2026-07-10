@@ -3,14 +3,17 @@ from app.views.login_page import LoginPage
 import json
 import os
 from tkinter import messagebox
+import tkinter as tk
 
 class UserController:
     ADMIN_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Administrator.json")
 
-    def __init__(self):
+    def __init__(self, root):
         # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []
         self.load_admins()  # JSONファイルから管理者情報を読み込む
+        self.root = root  # Tkinterのメインウィンドウを保持する
+        self.initial_page = None  # 初期画面のインスタンスを保持する
 
     def load_admins(self):
         if os.path.exists(self.ADMIN_JSON_PATH):
@@ -93,6 +96,7 @@ class UserController:
             data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
             with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
                 json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)
+            self.show_initial_page()
 
     def register_User(self, admin_id: str, name: str, password: str) -> None:
         validation_result = self.validate_admin(admin_id, name, password)
