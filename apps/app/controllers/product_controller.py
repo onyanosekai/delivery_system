@@ -47,11 +47,9 @@ class ProductController:
             return False
 
         if delivery_date < datetime.date.today():
-            messagebox.showerror("エラー", "本日の日付を入力してください。")
+            messagebox.showerror("エラー", "納品日は本日の日付以降である必要があります。")
             return False
-        if delivery_date > datetime.date.today():
-            messagebox.showerror("エラー", "本日の日付を入力してください。")
-            return False
+        
         if not driver_id.isdigit():
             messagebox.showerror("エラー", "配達員IDは数字のみ入力してください。")
             return False
