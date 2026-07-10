@@ -28,7 +28,7 @@ class UserController:
             ]
 
     # 1. ログイン処理 
-    def login(self, admin_id: int, password: str) -> bool:
+    def login(self, admin_id: int, admin_name: str, password: str) -> bool:
         """
         管理者のログイン認証を行うメソッド
         """
