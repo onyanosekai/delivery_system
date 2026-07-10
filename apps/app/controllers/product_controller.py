@@ -101,8 +101,8 @@ class ProductController:
     #=============================受け取り期限切れの表示=========================================
     def get_expired_products(self) -> List[Product]:
         today = datetime.date.today()
-        expired_products = [product for product in self.products if product.deadline < today]
-        return expired_products
+        if self.puroduct.deadline < today:
+            messagebox.showwarning("期限切れ", f"商品名「{self.product.product_name}」の受け取り期限が過ぎています。")
 
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
