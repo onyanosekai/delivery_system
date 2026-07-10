@@ -29,17 +29,29 @@ class UserController:
 
     # 1. ログイン処理 
     def login(self, admin_id: int, admin_name: str, password: str) -> bool:
-        """
-        管理者のログイン認証を行うメソッド
-        """
-        self.load_admins()  # 最新の管理者情報を読み込む
-        admin = self.find_admin(admin_id)
+        # 1. 画面から入力されたパスワードをハッシュ化
+        import hashlib
+        current_input_hash = hashlib.sha256(password.encode()).hexdigest()
         
-        # 見つからなければFalse
-        if admin is None:
-            return False
-            
-        return admin.check_password(password)
+        # 2. メモリを無視して、直接 JSON ファイルを読み込む
+        import json
+        if os.path.exists(self.ADMIN_JSON_PATH):
+            with open(self.ADMIN_JSON_PATH, "r", encoding="utf-8") as f:
+                try:
+                    data = json.load(f)
+                    # リストの中から該当するIDのデータを探す
+                    for item in data:
+                        # JSON内のキー名に合わせて比較（admin_id が文字列か数値か両方対応）
+                        if str(item.get("admin_id")) == str(admin_id):
+                            json_hash = item.get("password")
+                            # 完全に一致したら True を返してログイン成功！
+                            if json_hash == current_input_hash:
+                                return True
+                except Exception as e:
+                    print(f"[Debug] JSON直接読み込みエラー: {e}")
+        
+        # どこにも引っかからなければ認証失敗
+        return False
         
     def showAdminLoginPage(self):
         self.initial_page.clear_frame()

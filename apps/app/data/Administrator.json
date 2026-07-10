@@ -2,21 +2,26 @@
     {
         "admin_id": 38124079,
         "admin_name": "原",
-        "password": "213b1cd6dc2794eebf5351d0bf61cb47e771d4d63860e6e3dff843559a875920"
+        "password": "19be21fda0a0eaae56b74ef8f7e64b3ae22265605c5566a5da04fcb11f6014b3"
     },
     {
         "admin_id": 38124082,
         "admin_name": "福山寛朋",
-        "password": "ded8095437564ad931c1fd807df7c7027ddd1afa5a16a22da37b6b3e2aa5cac5"
+        "password": "45d8ff4062bbe956a04a1f8e70a4f286435beacecba202e764f4f4c6a91b74a4"
     },
     {
         "admin_id": 38123082,
         "admin_name": "test君",
-        "password": "d31eac009804005e509d8bdfe7e043a4b127323d5a88c2b8fd11e39507bd16ee"
+        "password": "1a600e655dcfcb2019af87bcaaf41eb00e89f29fab767b561c01e274409cb6fe"
     },
     {
         "admin_id": 38123081,
         "admin_name": "test君",
-        "password": "fa5271c387ad09aad2ce556bd598916f5d424441e60f1fd61a43fc421ca16c18"
+        "password": "debfe509abb0032063125faf9446e71c574aeb3b1b85316909d720fb0c5929d0"
+    },
+    {
+        "admin_id": 12345678,
+        "admin_name": "k-suzuki",
+        "password": "831045b0eb2885151497e2e417bf63369ffdbfa2485fdcdb948dd9c0c4aee902"
     }
 ]

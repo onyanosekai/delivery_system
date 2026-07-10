@@ -92,7 +92,8 @@ class LoginPage:
         # 1. main.pyで用意したUserControllerを使ってログイン認証を行う
         user_ctrl = self.controller  # main.pyの main() 内で controller = UserController() としているため
 
-        if user_ctrl.login(int_id, password):
+        # login_page.py の 95行目に self.root（あるいは必要なオブジェクト）を追加して渡す
+        if self.controller.login(int_id, name, password):
             messagebox.showinfo("成功", "ログインに成功しました！")
 
             # 2. 現在のログイン画面（土台のフレーム）を消し去る
@@ -117,5 +118,11 @@ class LoginPage:
 
         else:
             messagebox.showerror(
-                "失敗", "IDまたはパスワードが違います。"
+                "失敗", "ID、名前、またはパスワードが違います。"
             )
+
+    def _on_back_clicked(self):
+        """「戻る」ボタンが押された時に初期画面に戻る"""
+        # ログイン画面の時と完全に同じ処理です！
+        if hasattr(self.controller, 'show_initial_page'):
+            self.controller.show_initial_page()
