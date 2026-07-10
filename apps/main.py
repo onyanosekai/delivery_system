@@ -21,5 +21,16 @@ def main():
     # 3. メインループの実行
     root.mainloop()
 
+def show_delete_page(self, item_name, item_number, deadline, product_obj):
+        """商品データを引き連れて削除画面へ遷移する"""
+        self.show_page(DeletePage)
+        
+        current_page = self.container.winfo_children()[-1]
+        
+        if isinstance(current_page, DeletePage):
+            # 削除画面に商品情報と、オブジェクト自体を覚えさせる
+            current_page.target_product = product_obj
+            current_page.display(item_name, item_number, deadline)
+
 if __name__ == "__main__":
     main()

@@ -92,25 +92,37 @@ class LoginPage:
         if not admin_id or not name or not password:
             messagebox.showwarning("入力エラー", "すべての項目を入力してください。")
             return
+        try:
+            int_id = int(admin_id) # IDを数値に変換
+        except ValueError:
+            messagebox.showerror("エラー", "IDは数値で入力してください。")
+            return
+
+        # main.pyなどから共有されている user_controller を使って認証
+        if self.controller and self.controller.user_controller.login(int_id, password):
+            messagebox.showinfo("成功", "ログインに成功しました！")
             
+            # ★★★ ここで「ログイン成功時の遷移処理」を行います！ ★★★
+            self.root.set_menu_state(True) # (※下の補足を参照。メニューをログイン状態にする)
+            self.frame.destroy()  # ログイン画面の土台を消す
+            
+            # 循環インポートを防ぐために、ここで InitialPage をインポートして呼び出す
+            from app.views.initial_page import InitialPage
+            InitialPage(self.root, self.controller, is_logged_in=True)
+            
+        else:
+            messagebox.showerror("失敗", "IDまたはパスワードが違います。")
         # クラス図の指定通り、inputLoginInfo メソッドに入力データを渡して実行
         self.inputLoginInfo(admin_id, name, password)
 
     # ★ 追加: 「戻る」ボタンが押された時の内部処理
     # ==========================================
+   # 各画面の「戻る」処理の修正イメージ
     def _on_back_clicked(self):
-        """「戻る」ボタンが押された時に画面を initial_page に切り替える"""
-        # コントローラーにメソッドがあるか安全に確認して呼び出す
-        if hasattr(self.controller, 'show_initial_page'):
-            self.controller.show_initial_page()
-        else:
-            # 見つからない場合はエラーを表示して処理を止める（後ろの強制呼び出しを削除）
-            import tkinter.messagebox as messagebox
-            messagebox.showerror(
-                "エラー", 
-                f"controller ({type(self.controller).__name__}) に\n"
-                "前のページが見つかりません。\n"
-            )
+        self.frame.destroy()
+        from app.views.initial_page import InitialPage
+        # ログイン状態を True にしてメニューに戻る
+        InitialPage(self.root, self.controller, is_logged_in=True)
 
     def display(self):
         """画面を表示するための補助メソッド"""

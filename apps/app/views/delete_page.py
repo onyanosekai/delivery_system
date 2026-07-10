@@ -58,16 +58,12 @@ class DeletePage:
         self.root.mainloop()
 
     def _on_confirm_delete_clicked(self):
-        """
-        削除ボタンが押された時の内部処理
-        """
-        # ユーザーに最終確認のポップアップを出す
         answer = messagebox.askyesno("最終確認", "本当に削除してもよろしいですか？")
-        
         if answer:
-            # クラス図の「confirmDelete」の矢印に相当する処理
-            # コントローラー側の confirmDelete メソッドを呼び出す
-            # ※本来は削除対象のproductオブジェクトなどを渡します
-            self.controller.confirmDelete()
-            messagebox.showinfo("完了", "削除処理を要求しました。")
-            self.root.destroy()  # 画面を閉じる
+            # product_controller.py に実装されている confirm_delete を呼び出す
+            p_ctrl = self.controller.product_controller
+            
+            # 保持しておいた商品オブジェクトをそのまま渡して削除を実行！
+            if p_ctrl.confirm_delete(self.target_product):
+                # 削除が成功したら自動でポップアップが出るので、そのまま初期画面に戻る
+                self._on_back_clicked()

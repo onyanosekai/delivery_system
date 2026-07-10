@@ -21,6 +21,16 @@ class ProductListPage:
         self.label_title = tk.Label(root, text="商品一覧（配送リスト）", font=("Arial", 14, "bold"))
         self.label_title.pack(pady=10)
         
+        self.btn_go_delete = tk.Button(
+            self,
+            text="商品を削除する",
+            bg="orange",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            command=self._on_delete_button_clicked,
+        )
+        self.btn_go_delete.pack(pady=20)
+        
         # 一覧を表示するためのテーブル（Treeview）の作成
         # クラス図の Deliveryitem（またはProduct）の属性を想定して列を作成
         self.tree = ttk.Treeview(root, columns=("ID", "Name", "Customer", "Deadline", "Status"), show="headings")
@@ -58,6 +68,51 @@ class ProductListPage:
             bg="lightgreen"
         )
         self.btn_change_status.pack(side="left", padx=10)
+
+    def _on_delete_button_clicked(self):
+        """削除ボタンが押された時の処理"""
+        
+        # 1. 画面の入力欄から、削除したい「商品番号」を取得する
+        # (※もし入力欄の変数が違う名前なら、ここを書き換えてください)
+        target_pid = self.entry_delete_id.get().strip() 
+        
+        if not target_pid:
+            messagebox.showwarning("入力エラー", "削除したい商品番号を入力してください。")
+            return
+
+        # 2. Controllerを経由して、Product.json の中身（リスト）を取得、または直接検索する
+        # ※バックエンドの設計に合わせて、以下のいずれかの方法で商品オブジェクトを取得します
+        
+        p_ctrl = self.controller.product_controller
+        
+        # パターンA：ControllerにJSON全件読み込みメソッド（例: load_products）がある場合
+        # products = p_ctrl.load_products() # JSONからロード
+        # target_product = p_ctrl.search_items(products, target_pid, "")
+        
+        # パターンB：Controllerが直接JSONから探して単体を返してくれるメソッドがある場合
+        # target_product = p_ctrl.find_by_id(target_pid) 
+        
+        # 【仮実装】ここでは最初のCUI版の動きをベースに、controllerが持つproductsリストから探す例にします
+        target_product = None
+        # main.py や controller が保持している商品リストから探す
+        for p in self.controller.products: 
+            if p.product_id == target_pid:
+                target_product = p
+                break
+        # 3. 見つからなかった場合のエラーハンドリング
+        if target_product is None:
+            messagebox.showerror("エラー", f"商品番号: {target_pid} は見つかりません。")
+            return
+
+        # 4. JSONから見つかった本物のデータをセットして、削除画面へ引き渡す！
+        selected_item_name = target_product.product_name
+        selected_item_number = target_product.product_id
+        selected_deadline = target_product.deadline
+
+        # main.py の画面切り替えメソッドを呼び出し、データを引き渡す
+        self.controller.show_delete_page(
+            selected_item_name, selected_item_number, selected_deadline
+        )
 
     def displayList(self, delivery_list: list) -> None:
         """
