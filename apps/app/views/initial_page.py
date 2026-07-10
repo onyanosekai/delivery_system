@@ -7,6 +7,7 @@ from app.views.Registration_page import RegistrationPage
 from app.views.info_registration_page import InfoRegistrationPage
 # ★ 削除ページをインポートに追加
 from app.views.delete_page import DeletePage 
+from app.views.product_list_page import ProductListPage
 
 from app.controllers.product_controller import ProductController
 from app.controllers.User_controller import UserController
@@ -66,6 +67,13 @@ class InitialPage:
                 command=self.showDeletePage
             )
             self.btn_delete.pack(pady=5)
+
+            self.btn_list = tk.Button(
+                self.frame, text="商品一覧画面を開く", width=25, height=2,
+                bg="blue", fg="white", font=("Arial", 9, "bold"),
+                command = self.showProductListPage
+            )
+            self.btn_list.pack(pady=5)
 
             # ここから「ログアウト」ボタンを追加
             self.btn_logout = tk.Button(
