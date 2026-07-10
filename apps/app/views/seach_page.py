@@ -32,7 +32,7 @@ class SerchPage:
         self.entry_item_num = tk.Entry(root, width=35)
         self.entry_item_num.pack(padx=50, pady=5)
         
-        # --- ボタン配置エリア ---
+       
         self.btn_frame = tk.Frame(root)
         self.btn_frame.pack(pady=25)
         
@@ -55,7 +55,7 @@ class SerchPage:
             bg="gray",
             fg="white",
             font=("Arial", 11, "bold"),
-            command=self._on_back_clicked # 下で定義するメソッドを呼ぶ
+            command=self._on_back_clicked 
         )
         self.btn_back.pack(pady=5)
 
@@ -81,4 +81,9 @@ class SerchPage:
         if not product:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")
         
-        self.RegisterPage = ReceivePage(self.root, self.controller, product)
+        else:
+            for widget in self.root.winfo_children():
+                widget.destroy()  # 現在のウィジェットをすべて削除
+            # 商品が見つかった場合、受領画面を表示
+            ReceivePage(self.root, self.controller, self.product_controller, product)
+

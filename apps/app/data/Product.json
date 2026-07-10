@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "product_id": "12345678900",
+        "product_name": "books",
+        "customer_name": "福山寛朋",
+        "delivery_date": "2026-07-10",
+        "deadline": "2026-07-11",
+        "driver_id": 1234567897,
+        "status": "受取り済み"
+    }
+]
