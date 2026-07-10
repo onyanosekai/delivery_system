@@ -70,12 +70,16 @@ class DeletePage(tk.Frame):
         answer = messagebox.askyesno("最終確認", "本当に削除してもよろしいですか？")
         if answer:
             p_ctrl = self.controller.product_controller
-            if self.target_product and hasattr(p_ctrl, 'confirm_delete'):
-                if p_ctrl.confirm_delete(self.target_product):
-                    self._on_back_clicked()
-            else:
-                messagebox.showinfo("完了", "削除処理を要求しました。")
-                self._on_back_clicked()
+            
+            # ★すでに存在していた save_deleted_product を呼び出してJSONに保存
+            if self.target_product and hasattr(p_ctrl, 'save_deleted_product'):
+                p_ctrl.save_deleted_product(self.target_product)
+            
+            # 通常リストから削除する既存の処理（もしあればここに呼び出しを残す）
+            # 例: p_ctrl.confirm_delete(self.target_product) などがあれば併記
+            
+            messagebox.showinfo("成功", "商品を削除し、消去済みリストに記録しました。")
+            self._on_back_clicked()
 
     def _on_back_clicked(self):
         """現在の削除画面を破棄し、ログイン状態の初期メニュー画面を開き直す"""

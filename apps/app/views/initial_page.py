@@ -38,17 +38,19 @@ class InitialPage:
         )
         self.btn_search.pack(pady=5)
         
-        self.btn_login = tk.Button(
-            self.frame, text="管理者ログイン画面を開く", width=25, height=2,
-            command=self.showLoginPage
-        )
-        self.btn_login.pack(pady=5)
-        
-        self.btn_register = tk.Button(
-            self.frame, text="管理者登録画面を開く", width=25, height=2,
-            command=self.showUserRegistrationPage
-        )
-        self.btn_register.pack(pady=5)
+        # 🚨 【ここを修正】ログインしていない時（False）だけ「ログイン」「登録」ボタンを出す！
+        if not self.is_logged_in:
+            self.btn_login = tk.Button(
+                self.frame, text="管理者ログイン画面を開く", width=25, height=2,
+                command=self.showLoginPage
+            )
+            self.btn_login.pack(pady=5)
+            
+            self.btn_register = tk.Button(
+                self.frame, text="管理者登録画面を開く", width=25, height=2,
+                command=self.showUserRegistrationPage
+            )
+            self.btn_register.pack(pady=5)
         
         self.btn_info_reg = tk.Button(
             self.frame, text="情報登録画面を開く", width=25, height=2,
@@ -61,15 +63,20 @@ class InitialPage:
             self.btn_delete = tk.Button(
                 self.frame, text="商品削除画面を開く", width=25, height=2,
                 bg="orange", fg="white", font=("Arial", 9, "bold"),
-                command=self.showDeletePage  # 下で定義するメソッドを呼ぶ
+                command=self.showDeletePage
             )
             self.btn_delete.pack(pady=5)
 
+            # ここから「ログアウト」ボタンを追加
+            self.btn_logout = tk.Button(
+                self.frame, text="ログアウト", width=25, height=2,
+                bg="red", fg="white", font=("Arial", 9, "bold"),
+                command=self._on_logout_clicked  # ログアウト時の処理を呼ぶ
+            )
+            self.btn_logout.pack(pady=5)
+
     def _on_delete_button_clicked(self):
         """初期メニューの削除ボタンが押された時の処理"""
-        
-        # 1. 画面上の入力欄から、削除したい「商品番号」と「顧客名」を取得する
-        # ※ もし検索用の入力欄をまだ作っていない場合は、事前に配置してください
         target_pid = self.entry_delete_id.get().strip()
         target_customer = self.entry_delete_customer.get().strip()
         
@@ -77,23 +84,18 @@ class InitialPage:
             messagebox.showwarning("入力エラー", "商品番号と顧客名を入力してください。")
             return
 
-        # 2. product_controller に実装されている `search_items` をそのまま利用！
-        # これにより、自動的に Product.json から読み込まれたデータ内を検索します。
         p_ctrl = self.controller.product_controller
         target_product = p_ctrl.search_items(target_pid, target_customer)
 
-        # 3. JSONからデータが見つからなかった場合
         if target_product is None:
             messagebox.showerror("エラー", "該当する商品が見つかりません。")
             return
 
-        # 4. 見つかった本物の商品データ（オブジェクト）をそのまま丸ごと削除画面に引き渡す！
-        # main.py の画面切り替えメソッドを呼び出す
         self.controller.show_delete_page(
             target_product.product_name, 
             target_product.product_id, 
             target_product.deadline,
-            target_product  # ★ 実際のオブジェクトも一緒に渡しておくと後で削除が楽になります
+            target_product  
         )
 
     # --- 画面遷移メソッド群 ---
@@ -120,11 +122,27 @@ class InitialPage:
         self.frame.destroy()
         DeletePage(self.root, self.controller)
 
+    def _on_logout_clicked(self):
+        """ログアウトボタンが押された時の処理"""
+        # 1. 現在のメニュー画面（フレーム）を一度まるごと破壊する
+        self.frame.destroy()
+        
+        # 2. ログイン状態を False（未ログイン）に戻して、自分自身（InitialPage）を初期化し直す！
+        # これにより、ログイン・登録ボタンが復活し、削除・ログアウトボタンが消えます
+        from app.views.initial_page import InitialPage
+        app = InitialPage(self.root, self.controller, is_logged_in=False)
+        
+        # 3. コントローラー側の参照も未ログイン版の画面に更新しておく
+        if self.controller:
+            self.controller.initial_page = app
+            
+        messagebox.showinfo("ログアウト", "ログアウトしました。")
+
     def display(self):
         self.root.mainloop()
 
 if __name__ == "__main__":
     root = tk.Tk()
-    # テスト用：True にすると削除ボタンが出現します
+    # テスト用：True にすると削除ボタンが出現し、ログイン・登録ボタンが消えます
     app = InitialPage(root, is_logged_in=True) 
     app.display()
