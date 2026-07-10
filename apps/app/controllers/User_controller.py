@@ -2,6 +2,7 @@ from app.models.Administrator import Administrator
 from app.views.login_page import LoginPage
 import json
 import os
+from tkinter import messagebox
 
 class UserController:
     ADMIN_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Administrator.json")
@@ -9,12 +10,28 @@ class UserController:
     def __init__(self):
         # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []
+        self.load_admins()  # JSONファイルから管理者情報を読み込む
+
+    def load_admins(self):
+        if os.path.exists(self.ADMIN_JSON_PATH):
+            with open(self.ADMIN_JSON_PATH, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+
+            self.admin_list = [
+                Administrator(
+                    item["admin_id"],
+                    item["admin_name"],
+                    item["password"]
+                )
+                for item in data
+            ]
 
     # 1. ログイン処理 
     def login(self, admin_id: int, password: str) -> bool:
         """
         管理者のログイン認証を行うメソッド
         """
+        self.load_admins()  # 最新の管理者情報を読み込む
         admin = self.find_admin(admin_id)
         
         # 見つからなければFalse
@@ -38,6 +55,7 @@ class UserController:
         """
         管理者リストから指定されたIDのオブジェクトを探す
         """
+        self.load_admins()  # 最新の管理者情報を読み込む
         for admin in self.admin_list:
             # エンティティの属性名「admin_id」に合わせて比較
             if admin.admin_id == admin_id:
@@ -46,6 +64,7 @@ class UserController:
 
     # 2. ユーザー登録処理 (仕様書準拠 ＋ エンティティ生成)
     def validate_admin(self, admin_id: str, name: str, password: str) -> dict:
+        self.load_admins()  # 最新の管理者情報を読み込む
         is_length_ok = len(password) >= 8
         has_letter = any(char.isalpha() for char in password)
         has_digit = any(char.isdigit() for char in password)
@@ -71,19 +90,17 @@ class UserController:
             }
         
     def register_admin(self):
+            self.load_admins()  # 最新の管理者情報を読み込む
             data = {Administrator.from_dict(admin.to_dict()) for admin in self.admin_list}
             with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
                 json.dump([admin.to_dict() for admin in self.admin_list], f, ensure_ascii=False, indent=4)
 
     def register_User(self, admin_id: str, name: str, password: str) -> None:
-        """
-        新規管理者を登録するメソッド
-        """
         validation_result = self.validate_admin(admin_id, name, password)
         
         if validation_result is not None:
             # バリデーションエラーがあればメッセージを表示して終了
-            print(validation_result["message"])
+            messagebox.showerror("エラー", validation_result["message"])
             return
         
         # バリデーションOKならAdministratorオブジェクトを生成してリストに追加
@@ -93,5 +110,5 @@ class UserController:
         # JSONファイルに保存
         self.register_admin()
         
-        print(f"管理者ID「{admin_id}」の新規登録が完了しました。")
+        messagebox.showinfo("成功", "登録が完了しました。")
         
