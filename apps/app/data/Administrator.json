@@ -13,5 +13,10 @@
         "admin_id": 23456789,
         "admin_name": "t-okada",
         "password": "8603fad2cad0db9209d8a7d7e498d7c5a8c5eb9a842c229d5a9b4fda8d48238c"
+    },
+    {
+        "admin_id": 38124000,
+        "admin_name": "福山寛朋",
+        "password": "4adc83f72ea82a96c706c14b0bc560a036ae3f7f2341f493797685038639163c"
     }
 ]
