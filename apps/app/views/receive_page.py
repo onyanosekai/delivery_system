@@ -48,6 +48,17 @@ class ReceivePage:
         )
         self.btn_confirm.pack(pady=20)
 
+        # 👇 【ここを追加】戻るボタン
+        self.btn_back = tk.Button(
+            root,
+            text="戻る",
+            bg="gray",
+            fg="white",
+            font=("Arial", 11, "bold"),
+            command=self._on_back_clicked
+        )
+        self.btn_back.pack(pady=5)
+
     def receive_product(self, product):
         print("変更前:", product.status)
 
@@ -69,3 +80,14 @@ class ReceivePage:
                 
                 messagebox.showinfo("完了", "受領確認を記録しました。")
                 self.controller.show_initial_page()
+
+    def _on_back_clicked(self):
+        # 1. まず画面上の部品を【完全に】すべて消し去る
+        for widget in self.root.winfo_children():
+            widget.destroy()
+            
+        # 2. 確定しているファイル名（seach_page）から直接インポート！
+        from app.views.seach_page import SerchPage
+
+        # 3. 検索画面を生成（受領画面にいる＝未ログイン状態なので False を渡す）
+        SerchPage(self.root, self.controller, is_logged_in=False)

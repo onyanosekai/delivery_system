@@ -16,5 +16,14 @@
         "deadline": "2026-07-20",
         "driver_id": 1234566777,
         "status": "受取り済み"
+    },
+    {
+        "product_id": "20040725711",
+        "product_name": "ふじもん",
+        "customer_name": "藤本",
+        "delivery_date": "2026-07-18",
+        "deadline": "2026-07-25",
+        "driver_id": 701,
+        "status": "未受取"
     }
 ]
