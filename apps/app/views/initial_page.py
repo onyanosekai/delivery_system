@@ -105,7 +105,8 @@ class InitialPage:
 
     def showSearchPage(self) -> None:
         self.frame.destroy()
-        SerchPage(self.root, self.controller)
+        # ★ ↓ここ！ ログイン状態をSerchPageに渡すように書き換える
+        SerchPage(self.root, self.controller, is_logged_in=self.is_logged_in)
 
     def showLoginPage(self) -> None:
         self.frame.destroy()

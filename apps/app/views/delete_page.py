@@ -70,11 +70,10 @@ class DeletePage(tk.Frame):
     def _on_confirm_delete_clicked(self):
         answer = messagebox.askyesno("最終確認", "本当に削除してもよろしいですか？")
         if answer:
-            p_ctrl = self.controller.product_controller
             
             # ★すでに存在していた save_deleted_product を呼び出してJSONに保存
-            if self.target_product and hasattr(p_ctrl, 'save_deleted_product'):
-                p_ctrl.save_deleted_product(self.target_product)
+            if self.target_product and hasattr(self.controller.product_controller, 'save_deleted_product'):
+                self.controller.product_controller.confirm_delete(self.target_product)
             
             # 通常リストから削除する既存の処理（もしあればここに呼び出しを残す）
             # 例: p_ctrl.confirm_delete(self.target_product) などがあれば併記
