@@ -73,10 +73,21 @@ class SerchPage:
         self.inputProductInfo(customer_name, item_number)
         
     def _on_back_clicked(self):
-        """「戻る」ボタンが押された時に初期画面に戻る"""
-        if hasattr(self.controller, 'show_initial_page'):
-            self.controller.show_initial_page()
-    
+        # 1. まず画面上の部品を【完全に】すべて消し去る
+        for widget in self.root.winfo_children():
+            widget.destroy()
+            
+        # 2. ログイン状態を判定（SearchPageは自分の状態、DeletePage等は強制True）
+        is_logged = getattr(self, 'is_logged_in', True)
+
+        # 3. 初期メニューを強制的に描画する
+        from app.views.initial_page import InitialPage
+        app = InitialPage(self.root, self.controller, is_logged_in=is_logged)
+
+        # 4. main.py（コントローラー）が古い画面を呼ばないように上書き！
+        if hasattr(self, 'controller') and self.controller:
+            self.controller.initial_page = app
+            
     def inputProductInfo(self, customer_name: str, item_number: str) -> None:
         product = self.product_controller.search_items(item_number, customer_name)
         

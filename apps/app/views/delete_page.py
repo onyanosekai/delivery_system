@@ -79,10 +79,17 @@ class DeletePage(tk.Frame):
             self._on_back_clicked()
 
     def _on_back_clicked(self):
-        """現在の削除画面を破棄し、ログイン状態の初期メニュー画面を開き直す"""
-        self.destroy()  # 削除画面を消し去る
+        # 1. まず画面上の部品を【完全に】すべて消し去る
+        for widget in self.root.winfo_children():
+            widget.destroy()
+            
+        # 2. ログイン状態を判定（SearchPageは自分の状態、DeletePage等は強制True）
+        is_logged = getattr(self, 'is_logged_in', True)
 
+        # 3. 初期メニューを強制的に描画する
         from app.views.initial_page import InitialPage
-        # ログイン状態を維持したまま初期画面を生成
-        app = InitialPage(self.root, self.controller, is_logged_in=True)
-        self.controller.initial_page = app
+        app = InitialPage(self.root, self.controller, is_logged_in=is_logged)
+
+        # 4. main.py（コントローラー）が古い画面を呼ばないように上書き！
+        if hasattr(self, 'controller') and self.controller:
+            self.controller.initial_page = app

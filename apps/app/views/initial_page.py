@@ -63,13 +63,6 @@ class InitialPage:
 
         # ★★★ ログイン状態のときだけ「商品削除ボタン」と「ログアウトボタン」を表示する ★★★
         if self.is_logged_in:
-            self.btn_delete = tk.Button(
-                self.frame, text="商品削除画面を開く", width=25, height=2,
-                bg="orange", fg="white", font=("Arial", 9, "bold"),
-                command=self.showSearchPage  
-            )
-            self.btn_delete.pack(pady=5)
-
             # 👇 【ここを再追加！】ログアウトボタンを配置
             self.btn_logout = tk.Button(
                 self.frame, text="ログアウト", width=25, height=2,
@@ -118,7 +111,8 @@ class InitialPage:
 
     def showInfoRegistrationPage(self) -> None:
         self.frame.destroy()
-        InfoRegistrationPage(self.root, self.controller)
+        # ★ ↓ここ！ is_logged_in=self.is_logged_in を付け足す
+        InfoRegistrationPage(self.root, self.controller, is_logged_in=self.is_logged_in)
 
     # ★★★ 新設：削除画面へ遷移するメソッド ★★★
     def showDeletePage(self) -> None:

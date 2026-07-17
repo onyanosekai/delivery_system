@@ -11,11 +11,12 @@ class Controller:
         self.product_controller = ProductController()
         
 class InfoRegistrationPage:
-    def __init__(self, root, controller):
+    # ↓ カッコの最後に「, is_logged_in=False」を付け足します！
+    def __init__(self, root, controller, is_logged_in=False):
         self.root = root
         self.controller = controller
         self.product_controller = ProductController()
-
+        self.is_logged_in = is_logged_in
         
         # 画面の基本設定
         self.root.title("情報登録画面")
@@ -123,10 +124,17 @@ class InfoRegistrationPage:
             messagebox.showerror("エラー", "登録内容に不備があります。コンソールを確認してください。")
 
     def _on_back_clicked(self):
-        """「戻る」ボタンが押された時に初期画面に戻る"""
-        # ログイン画面の時と完全に同じ処理です！
-        if hasattr(self.controller, 'show_initial_page'):
-            self.controller.show_initial_page()
+        # 1. まず画面上の部品を【完全に】すべて消し去る
+        for widget in self.root.winfo_children():
+            widget.destroy()
+            
+        # 2. 自分が持っているログイン状態を引き継いで初期画面を作り直す！
+        from app.views.initial_page import InitialPage
+        app = InitialPage(self.root, self.controller, is_logged_in=self.is_logged_in)
+
+        # 3. main.py（コントローラー）が古い画面を呼ばないように上書き！
+        if hasattr(self, 'controller') and self.controller:
+            self.controller.initial_page = app
 
     def display(self):
         """
