@@ -7,7 +7,6 @@ from app.views.Registration_page import RegistrationPage
 from app.views.info_registration_page import InfoRegistrationPage
 # ★ 削除ページをインポートに追加
 from app.views.delete_page import DeletePage 
-from app.views.product_list_page import ProductListPage
 
 from app.controllers.product_controller import ProductController
 from app.controllers.User_controller import UserController
