@@ -66,7 +66,7 @@ class InitialPage:
             self.btn_delete = tk.Button(
                 self.frame, text="商品削除画面を開く", width=25, height=2,
                 bg="orange", fg="white", font=("Arial", 9, "bold"),
-                command=self.showDeletePage  
+                command=self.showSearchPage  
             )
             self.btn_delete.pack(pady=5)
 
