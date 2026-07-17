@@ -78,6 +78,8 @@ class SerchPage:
     def inputProductInfo(self, customer_name: str, item_number: str) -> None:
         product = self.product_controller.search_items(item_number, customer_name)
         
+        #もしログインしていない場合は、受け取り画面に遷移、ログインしている場合は、削除画面に遷移す
+        
         if not product:
             messagebox.showerror("検索エラー", "該当する商品が見つかりませんでした。")
         

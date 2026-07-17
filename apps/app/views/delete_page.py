@@ -3,13 +3,14 @@ from tkinter import messagebox
 from datetime import datetime
 
 class DeletePage(tk.Frame):
-    def __init__(self, root, controller):
+    def __init__(self, root, controller, product_controller,product):
         # 1. 親クラス（tk.Frame）の初期化
         super().__init__(root)
 
         self.root = root  # main.py の root を保持
         self.controller = controller
-        self.target_product = None  # 削除対象のオブジェクト保持用
+        self.product_controller = product_controller  # ProductController のインスタンスを保持
+        self.target_product = product  # 削除対象のオブジェクト保持用
         
         # 画面の基本設定
         self.root.title("削除確認画面")
