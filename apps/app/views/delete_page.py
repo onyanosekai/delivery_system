@@ -73,10 +73,7 @@ class DeletePage(tk.Frame):
             
             # ★すでに存在していた save_deleted_product を呼び出してJSONに保存
             if self.target_product and hasattr(self.controller.product_controller, 'save_deleted_product'):
-                self.controller.product_controller.confirm_delete(self.target_product)
-            
-            # 通常リストから削除する既存の処理（もしあればここに呼び出しを残す）
-            # 例: p_ctrl.confirm_delete(self.target_product) などがあれば併記
+                self.product_controller.confirm_delete(self.target_product)
             
             messagebox.showinfo("成功", "商品を削除し、消去済みリストに記録しました。")
             self._on_back_clicked()

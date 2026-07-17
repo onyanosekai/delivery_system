@@ -7,14 +7,5 @@
         "deadline": "2026-07-11",
         "driver_id": 1234567897,
         "status": "受取り済み"
-    },
-    {
-        "product_id": "09876543211",
-        "product_name": "プログラミングのすゝめ",
-        "customer_name": "はらだー",
-        "delivery_date": "2026-07-16",
-        "deadline": "2026-07-20",
-        "driver_id": 1234566777,
-        "status": "受取り済み"
     }
 ]

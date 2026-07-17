@@ -92,6 +92,7 @@ class ProductController:
             self.save_deleted_product(target_product)
             self.products.remove(target_product)
             self.save_products_to_json()
+            self.save_products_to_json()  # 削除後にJSONに保存
             messagebox.showinfo("成功", f"商品名「{target_product.product_name}」のデータを削除しました。")
             return True
         else:
