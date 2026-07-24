@@ -11,7 +11,7 @@ class ProductController:
     DELETED_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Deleted_product.json")
 
     def __init__(self):
-        # コントローラーがデータリストを保持するようにする
+        
         self.products: List[Product] = []
         self.load_products_from_json()
 
@@ -107,9 +107,9 @@ class ProductController:
 
     #==============================受取処理=========================================
     def receive_product(self, product: Product) -> None:
-        print("変更前のステータス:", product.status)  # デバッグ用
+        #print("変更前のステータス:", product.status)  # デバッグ用
         product.status = "受取り済み"
-        print("変更後のステータス:", product.status)  # デバッグ用
+        #print("変更後のステータス:", product.status)  # デバッグ用
         self.save_products_to_json()
 
     #=============================商品登録=========================================
@@ -118,14 +118,14 @@ class ProductController:
             return False
         product = Product(product_id, product_name, customer_name, delivery_date, deadline, driver_id)
         self.products.append(product)
-        self.save_products_to_json()  # 登録後にJSONに保存
+        self.save_products_to_json()  
         return True
 
     #=============================商品のProduct.jsonへの保存========================================
     def save_products_to_json(self):
         data = [product.to_dict() for product in self.products]
 
-        print(data)  # ←追加
+        print(data) 
 
         with open(self.PRODUCT_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)

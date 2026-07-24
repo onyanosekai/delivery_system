@@ -16,15 +16,14 @@ class Administrator:
     
     @classmethod
     def from_dict(cls, data: dict):
-        # 1. 一旦、__init__を呼び出す（パスワードはハッシュ化されてしまうが後で上書きする）
+        
         admin = cls(
             admin_id=data["admin_id"],
             admin_name=data["admin_name"],
-            password=""  # 空文字などを渡しておく
+            password=""  
         )
         
-        # 2. ★修正：全変数デバッグログで確認した、正しい変数名 'password_hash' に直接上書きする
-        # data["password"] に入っているJSONの一重ハッシュ値をそのまま代入します
+        
         admin.password_hash = data["password"]
         
         return admin

@@ -9,9 +9,8 @@ class UserController:
     ADMIN_JSON_PATH = os.path.join(os.path.dirname(__file__), "../data/Administrator.json")
 
     def __init__(self):
-        # 登録された Administrator オブジェクトを格納するリスト
         self.admin_list = []
-        self.load_admins()  # JSONファイルから管理者情報を読み込む
+        self.load_admins()  
 
     def load_admins(self):
         if os.path.exists(self.ADMIN_JSON_PATH):
@@ -41,12 +40,11 @@ class UserController:
                 try:
                     admin_data_list = json.load(f)
                     
-                    # JSONに保存されている全ユーザーを一人ずつチェック
+                    
                     for user in admin_data_list:
                         if str(user.get("admin_id")) == str(admin_id) and str(user.get("admin_name")) == str(admin_name):
                             json_hash = user.get("password")
                             
-                            # ハッシュ値が一致すればログイン成功
                             if json_hash == current_input_hash:
                                 return True
                 except Exception as e:
@@ -68,9 +66,9 @@ class UserController:
         """
         管理者リストから指定されたIDのオブジェクトを探す
         """
-        self.load_admins()  # 最新の管理者情報を読み込む
+        self.load_admins()  
         for admin in self.admin_list:
-            # エンティティの属性名「admin_id」に合わせて比較
+            
             if admin.admin_id == admin_id:
                 return admin
         return None
@@ -118,7 +116,7 @@ class UserController:
             messagebox.showerror("エラー", validation_result["message"])
             return
         
-        # 1. 新しいユーザーのハッシュ値を作成
+        
         new_password_hash = hashlib.sha256(password.encode()).hexdigest()
         new_admin_data = {
             "admin_id": int(admin_id),
@@ -126,7 +124,7 @@ class UserController:
             "password": new_password_hash
         }
 
-        # 2. 既存の JSON ファイルを読み込む（全員分を保持するため）
+        
         admin_data_list = []
         if os.path.exists(self.ADMIN_JSON_PATH):
             with open(self.ADMIN_JSON_PATH, "r", encoding="utf-8") as f:
@@ -135,10 +133,10 @@ class UserController:
                 except json.JSONDecodeError:
                     admin_data_list = []
 
-        # 3. リストに新しいユーザーを追記（上書きではなく追加！）
+        
         admin_data_list.append(new_admin_data)
 
-        # 4. JSON ファイルに全員分を綺麗に保存する
+       
         with open(self.ADMIN_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(admin_data_list, f, ensure_ascii=False, indent=4)
         
